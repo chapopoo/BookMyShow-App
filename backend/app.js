@@ -4,6 +4,11 @@ const app = express();
 const dotenv = require("dotenv");
 dotenv.config(); //stores the environment variables from .env file in process.env
 
+const dbConfig = require("./config/db");
+
+//database connection
+dbConfig.connectDB(); 
+
 app.listen(process.env.PORT, () => {
     console.log("backend application has started!")
 })
