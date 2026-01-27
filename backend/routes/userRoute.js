@@ -13,12 +13,49 @@ userRouter.post("/register", async (req, res) => {
             data: user
         })
     }
-    catch (error) {
-        console.error("REGISTER ERROR:", error);
+    catch(e) {
+        console.log(e)
         res.status(500).send({
             success: false,
-            message: error.message
-        });
+            message: "Internal Server Error"
+        })
+    }
+})
+
+userRouter.post("/login", async function(req, res){
+    try {
+        const user = await UserModel.findOne({
+            email:req.body.email
+        }); //finding the user object from the database
+        
+        console.log(user)
+        if(!user){
+            return res.status(404).send({
+                success:false,
+                message:"User not found"
+            })
+        }
+
+        //checking password
+        if(user.password !== req.body.password){
+            return res.status(404).send({
+                success:false,
+                message:"No user/pass combo found"
+            })
+        }
+
+        res.send({
+            success: true,
+            message: "Logged In successfully",
+            data: user
+        })
+    }
+    catch(e) {
+        console.log(e)
+        res.status(500).send({
+            success: false,
+            message: "Internal Server Error"
+        })
     }
 })
 

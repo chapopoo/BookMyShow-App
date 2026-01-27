@@ -7,7 +7,7 @@ dotenv.config(); //stores the environment variables from .env file in process.en
 
 app.use(express.json()); //middleware to parse json data in request body, we cant use req.body directly without this middleware
 
-app.use("/", userRouter);//registering root level route for userRouter
+app.use("/api", userRouter);//registering root level route for userRouter
 
 
 const dbConfig = require("./config/db");
