@@ -1,6 +1,9 @@
 const express = require("express");
 const UserModel = require("../model/userModel");
 const userRouter = express.Router(); //creates a router object to handle routes for user-related operations
+const bcrypt = require("bcryptjs");
+
+const SALT_Rounds = 12;
 
 userRouter.post("/register", async (req, res) => {
     try {
@@ -37,7 +40,15 @@ userRouter.post("/login", async function(req, res){
         }
 
         //checking password
-        if(user.password !== req.body.password){
+        // if(user.password !== req.body.password){
+        //     return res.status(404).send({
+        //         success:false,
+        //         message:"No user/pass combo found"
+        //     })
+        // }
+
+        const isPasswordValid = await bcrypt.compare(req.body.password, user.password)
+        if(!isPasswordValid){
             return res.status(404).send({
                 success:false,
                 message:"No user/pass combo found"
