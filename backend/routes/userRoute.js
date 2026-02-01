@@ -24,10 +24,11 @@ userRouter.post("/register", async (req, res) => {
         if(isUserPresent){
            return res.status(500).send({
                 success: false,
+                userPresentError: true,
                 message: "User with this email already exists"
             })
         }
-        
+
         const user = new UserModel(req.body); //creating new user object locally
 
         //generating a salt and hashing the password with the salt

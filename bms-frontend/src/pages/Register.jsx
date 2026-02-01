@@ -1,24 +1,30 @@
 import React from "react";
-import { Button, Form, Input, message } from "antd";
-import { Link } from "react-router-dom"
+import { Button, Form, Input, message} from "antd";
+import { Link, useNavigate } from "react-router-dom"
 import { registerUser } from "../api/users";
 
 function Register() {
   const [messageApi, contextHolder] = message.useMessage();
+  const navigate = useNavigate();
   const onFinishRegistrationForm = async (values) => {
     console.log(values);
     try {
       const response = await registerUser(values);
       if (response.success) {
         messageApi.success("User registration is Successful");
+        navigate("/login");
       }
       else {
         messageApi.error("Something went wrong");
       }
     }
     catch (err) {
+      if (response.userPresentError) {
+        messageApi.error("Email is already taken!!")
+      } else {
         messageApi.error("Something went wrong!")
-        console.log("error", error)
+        console.log("error", err)
+      }
     }
   }
   return (

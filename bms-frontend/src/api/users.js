@@ -10,4 +10,14 @@ const registerUser = async (value) =>{
     }
 }
 
-export {registerUser};
+const loginUser = async (value) =>{
+    try{
+        const response = await axiosInstance.post("/api/user/login", value)
+        return response.data;
+    }
+    catch(err){
+        throw err;
+    }
+}
+
+export {registerUser, loginUser};
