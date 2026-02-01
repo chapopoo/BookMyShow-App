@@ -17,7 +17,7 @@ userRouter.post("/register", async (req, res) => {
             })   
         }
 
-        const user = new UserModel(req.body); //creating a js object out of the class defined in userModel.js
+        const user = new UserModel(req.body); //creating new user object locally
 
         //generating a salt and hashing the password with the salt
         const gensalt = await bcrypt.genSalt(SALT_Rounds) 
