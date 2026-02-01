@@ -1,11 +1,29 @@
 import React from "react";
-import { Button, Form, Input } from "antd";
+import { Button, Form, Input, message } from "antd";
 import { Link } from "react-router-dom"
+import { registerUser } from "../api/users";
 
 function Register() {
- 
- return (
+  const [messageApi, contextHolder] = message.useMessage();
+  const onFinishRegistrationForm = async (values) => {
+    console.log(values);
+    try {
+      const response = await registerUser(values);
+      if (response.success) {
+        messageApi.success("User registration is Successful");
+      }
+      else {
+        messageApi.error("Something went wrong");
+      }
+    }
+    catch (err) {
+        messageApi.error("Something went wrong!")
+        console.log("error", error)
+    }
+  }
+  return (
     <>
+      {contextHolder}
       <header className="App-header">
         <main className="main-area mw-500 text-center px-3">
           <section className="left-section">
@@ -13,7 +31,7 @@ function Register() {
           </section>
 
           <section className="right-section">
-            <Form layout="vertical">
+            <Form onFinish={onFinishRegistrationForm} layout="vertical">
               <Form.Item
                 label="Name"
                 htmlFor="name"
@@ -25,7 +43,7 @@ function Register() {
                   id="name"
                   type="text"
                   placeholder="Enter your name"
-                 
+
                 ></Input>
               </Form.Item>
 
@@ -40,7 +58,7 @@ function Register() {
                   id="email"
                   type="text"
                   placeholder="Enter your Email"
-                  
+
                 ></Input>
               </Form.Item>
 
@@ -55,7 +73,7 @@ function Register() {
                   id="password"
                   type="password"
                   placeholder="Enter your Password"
-                 
+
                 ></Input>
               </Form.Item>
 
