@@ -3,6 +3,7 @@ const UserModel = require("../model/userModel");
 const userRouter = express.Router(); //creates a router object to handle routes for user-related operations
 const validator = require("email-validator");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
 const SALT_Rounds = 12;
 
@@ -84,10 +85,19 @@ userRouter.post("/login", async function(req, res){
             })
         }
 
+        //start my JWT token generation
+        const token = jwt.sign(
+            {
+                userId: user._id
+            },
+            process.env.JWT_SECRET,
+            {expiresIn: "1d"}
+        )
+
         res.send({
             success: true,
             message: "Logged In successfully",
-            data: user
+            token
         })
     }
     catch(e) {

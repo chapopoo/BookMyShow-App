@@ -7,7 +7,6 @@ function Register() {
   const [messageApi, contextHolder] = message.useMessage();
   const navigate = useNavigate();
   const onFinishRegistrationForm = async (values) => {
-    console.log(values);
     try {
       const response = await registerUser(values);
       if (response.success) {

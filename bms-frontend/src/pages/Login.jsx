@@ -11,6 +11,7 @@ function Login() {
       const response = await loginUser(values);
       if (response.success) {
         messageApi.success("Logged in Successfully");
+        localStorage.setItem("token", response.token);
         navigate("/");
       }
       else {
