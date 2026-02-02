@@ -4,6 +4,7 @@ const userRouter = express.Router(); //creates a router object to handle routes 
 const validator = require("email-validator");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const authMiddleware = require("../middlewares/authMiddleware");
 
 const SALT_Rounds = 12;
 
@@ -105,6 +106,33 @@ userRouter.post("/login", async function(req, res){
         res.status(500).send({
             success: false,
             message: "Internal Server Error"
+        })
+    }
+})
+
+userRouter.post("/get-current-user", authMiddleware, async function(req, res){
+    try{
+        const userId = req.body.userId
+
+        if(!userId){
+            return res.status(500).send({
+                success:false,
+                message:"something went wrong! try again!"
+            })
+        }
+
+        const user = await UserModel.findById(userId).select("-password"); //excluding password field
+
+        res.send({
+            success:true,
+            message:"User fetched successfully",
+            data: user
+        })
+    }
+    catch(e){
+        return res.status(500).send({
+            success:false,
+            message:"something went wrong! try again!"
         })
     }
 })
