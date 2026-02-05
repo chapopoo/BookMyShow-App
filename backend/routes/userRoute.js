@@ -110,7 +110,7 @@ userRouter.post("/login", async function(req, res){
     }
 })
 
-userRouter.post("/get-current-user", authMiddleware, async function(req, res){
+userRouter.post("/get-current-user", authMiddleware, async function(req, res){//route to utilise authmiddleware
     try{
         const userId = req.body.userId
 
