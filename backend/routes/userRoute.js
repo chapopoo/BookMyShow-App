@@ -110,31 +110,32 @@ userRouter.post("/login", async function(req, res){
     }
 })
 
-userRouter.post("/get-current-user", authMiddleware, async function(req, res){//route to utilise authmiddleware
-    try{
-        const userId = req.body.userId
+userRouter.get("/get-current-user", authMiddleware, async function (req, res){
+    try {
+        // Try to get the req.body.userid from the req object
+        const userId = req.userId
 
-        if(!userId){
+        if(!userId) {
             return res.status(500).send({
-                success:false,
-                message:"something went wrong! try again!"
+                success: false,
+                message: "Something went wrong! Try again"
             })
         }
 
-        const user = await UserModel.findById(userId).select("-password"); //excluding password field
+        const user = await UserModel.findById(userId).select("-password")
 
         res.send({
-            success:true,
-            message:"User fetched successfully",
-            data: user
+            success: true,
+            user
         })
-    }
-    catch(e){
-        return res.status(500).send({
-            success:false,
-            message:"something went wrong! try again!"
+    } catch (error) {
+        res.status(500).send({
+            success: false,
+            message: "Something went wrong! Try again"
         })
     }
 })
+
+
 
 module.exports = userRouter;
