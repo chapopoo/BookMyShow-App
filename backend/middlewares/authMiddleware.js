@@ -3,10 +3,7 @@ const jwt = require("jsonwebtoken");
 module.exports = function(req, res, next) {
     try{
         const token = req.headers.authorization.split(" ")[1]; //Authorization
-        console.log(token);
-        console.log(process.env.JWT_SECRET);
         const verifiedToken = jwt.verify(token, process.env.JWT_SECRET);
-        console.log(verifiedToken);
         //adding userId to req.body so that it can be accessed in the route handler
         req.userId = verifiedToken.userId;
 

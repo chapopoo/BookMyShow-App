@@ -12,45 +12,46 @@ import {
   UserOutlined,
 } from "@ant-design/icons";
 import { Link } from "react-router-dom";
-// import { setUser } from "../redux/userSlice";
+import { setUser } from "../redux/userSlice";
 
 function ProtectedRoute({ children }) {
-  const user = useSelector((state) => state.users);
+  const user = useSelector((state) => state.users.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  console.log({ user })
-
+  console.log({user})
   const navItems = [
     {
+      key: "home",
       label: "Home",
       icon: <HomeOutlined />,
     },
-
     {
-      label: `${user ? user.name : ""}`,
+      key: "user",
+      label: user?.name || "",
       icon: <UserOutlined />,
       children: [
         {
+          key: "profile",
           label: (
             <span
-            onClick={() => {
-              if (user.isAdmin) {
-                navigate("/admin");
-              } else if (user.isPartner) {
-                navigate("/partner");
-              } else {
-                navigate("/profile");
-              }
-            }}
+              onClick={() => {
+                if (user?.isAdmin) {
+                  navigate("/admin");
+                } else if (user?.isPartner) {
+                  navigate("/partner");
+                } else {
+                  navigate("/profile");
+                }
+              }}
             >
               My Profile
             </span>
           ),
           icon: <ProfileOutlined />,
         },
-
         {
+          key: "logout",
           label: (
             <Link
               to="/login"
@@ -67,20 +68,21 @@ function ProtectedRoute({ children }) {
     },
   ];
 
+
   const getValidUser = async () => {
     try {
-     //Before fetching, turn loading on 
-      // dispatch(showLoading());
+      //Before fetching, turn loading on 
+      dispatch(showLoading());
 
       const response = await getCurrentUser();
       console.log(response)
 
 
-      // dispatch(setUser(response.user));
-      // dispatch(hideLoading());
+      dispatch(setUser(response.user)); // Store the user in the Redux store
+      dispatch(hideLoading());
       // Hide Loader
     } catch (error) {
-      // dispatch(setUser(null));
+      dispatch(setUser(null));
       message.error(error.message);
     }
   };
