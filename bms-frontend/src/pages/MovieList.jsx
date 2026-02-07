@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Button, Table } from "antd";
-// import MovieForm from "./MovieForm";
+import MovieForm from "./MovieForm";
 import { hideLoading, showLoading } from "../redux/loaderSlice";
 import { getAllMovies } from "../api/movies";
 import { useDispatch } from "react-redux";
 // import moment from "moment";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
-// import MovieForm from "./MovieForm";
 // import DeleteMovieModal from "./DeleteMovieModal";
 
 function MovieList() {
