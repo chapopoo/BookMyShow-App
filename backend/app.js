@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
-const userRouter = require("./routes/userRoute");//importing userRouter from userRoute.js
+const userRouter = require("./routes/userRoute");
+const movieRouter = require("./routes/movieRoute");
 const cors = require("cors");
 
 const dotenv = require("dotenv");
@@ -15,7 +16,7 @@ app.use(cors({
 app.use(express.json()); //middleware to parse json data in request body, we cant use req.body directly without this middleware
 
 app.use("/api/user", userRouter);//registering root level route for userRouter
-
+app.use("/api/movies", movieRouter);
 
 const dbConfig = require("./config/db");
 

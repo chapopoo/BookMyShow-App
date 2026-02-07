@@ -112,7 +112,7 @@ userRouter.post("/login", async function(req, res){
 
 userRouter.get("/get-current-user", authMiddleware, async function (req, res){
     try {
-        // Try to get the req.body.userid from the req object
+        
         const userId = req.userId
 
         if(!userId) {
