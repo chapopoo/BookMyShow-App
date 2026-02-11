@@ -7,6 +7,7 @@ import Register from './pages/Register.jsx'
 import store from './redux/store.js';
 import ProtectedRoute from './pages/ProtectedRoute.jsx';
 import Admin from './pages/Admin.jsx';
+import Partner from './pages/Partner.jsx';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<ProtectedRoute><Home/></ProtectedRoute>} />
+          <Route path="/partner" element={<ProtectedRoute><Partner/></ProtectedRoute>} />
           <Route path="/home" element={<ProtectedRoute><Admin/></ProtectedRoute>} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />

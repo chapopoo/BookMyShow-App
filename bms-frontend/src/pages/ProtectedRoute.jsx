@@ -16,10 +16,14 @@ import { setUser } from "../redux/userSlice";
 
 function ProtectedRoute({ children }) {
   const user = useSelector((state) => state.users.user);
+  // Track the current authentication token in state to detect when user logs in/out
+  // This allows useEffect to re-run when token changes and fetch the correct user data
+  const [token, setToken] = useState(localStorage.getItem("token"));
+                                               
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  console.log({user})
+  console.log({ user })
   const navItems = [
     {
       key: "home",
@@ -36,9 +40,9 @@ function ProtectedRoute({ children }) {
           label: (
             <span
               onClick={() => {
-                if (user?.isAdmin) {
+                if (user?.role === "Admin") {
                   navigate("/admin");
-                } else if (user?.isPartner) {
+                } else if (user?.role === "Partner") {
                   navigate("/partner");
                 } else {
                   navigate("/profile");
@@ -56,7 +60,12 @@ function ProtectedRoute({ children }) {
             <Link
               to="/login"
               onClick={() => {
+                // Remove token from localStorage
                 localStorage.removeItem("token");
+                // Update token state to trigger useEffect re-run and redirect to login
+                setToken(null);
+                // Clear user data from Redux store
+                dispatch(setUser(null));
               }}
             >
               Log Out
@@ -77,7 +86,6 @@ function ProtectedRoute({ children }) {
       const response = await getCurrentUser();
       console.log(response)
 
-
       dispatch(setUser(response.user)); // Store the user in the Redux store
       dispatch(hideLoading());
       // Hide Loader
@@ -87,15 +95,32 @@ function ProtectedRoute({ children }) {
     }
   };
 
+  // Listen for localStorage changes from other browser tabs/windows
+  // This handles scenarios where user logs in/out in another tab
   useEffect(() => {
-    // If there is no token, no need to make any API call
-    // Simply redirect back to the login page
-    if (localStorage.getItem("token")) {
+    const handleStorageChange = () => {
+      // When storage changes in another tab (e.g., user logs in elsewhere),
+      // update the token state in this component to keep it in sync
+      const newToken = localStorage.getItem("token");
+      setToken(newToken);
+    };
+    
+    window.addEventListener('storage', handleStorageChange);
+    // Cleanup: remove listener when component unmounts to prevent memory leaks
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, []);
+
+  // Re-fetch user data whenever token changes
+  // This ensures the correct user is displayed when switching between accounts
+  useEffect(() => {
+    if (token) {
+      // Token exists - fetch the user associated with this token from the backend
       getValidUser();
     } else {
+      // No token - redirect to login page
       navigate("/login");
     }
-  }, []);
+  }, [token, navigate]);
 
   return (
     user && (
@@ -117,7 +142,7 @@ function ProtectedRoute({ children }) {
             </h3>
             <Menu theme="dark" mode="horizontal" items={navItems} />
           </Header>
-          <div style={{ padding: 24, minHeight: 380, height:"90vh", background: "#fff" }}>
+          <div style={{ padding: 24, minHeight: 380, height: "90vh", background: "#fff" }}>
             {children}
           </div>
         </Layout>

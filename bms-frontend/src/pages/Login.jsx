@@ -12,7 +12,14 @@ function Login() {
       if (response.success) {
         messageApi.success("Logged in Successfully");
         localStorage.setItem("token", response.token);
-        navigate("/");
+        
+        if (response.role === "Admin") {
+          return navigate("/home");
+        }
+        if (response.role === "Partner") {
+          return navigate("/partner");
+        }
+        return navigate("/");
       }
       else {
         messageApi.error("Something went wrong");

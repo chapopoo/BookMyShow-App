@@ -98,7 +98,8 @@ userRouter.post("/login", async function(req, res){
         res.send({
             success: true,
             message: "Logged In successfully",
-            token
+            token,
+            role:user.role
         })
     }
     catch(e) {

@@ -2,7 +2,7 @@ import React,{Children} from 'react'
 
 import { Tabs} from 'antd';
 import MovieList from './MovieList';
-import TheatersTable from './TheatersTable';
+import TheatersTable from './TheatresTable';
 
 function Admin() {
     const tabItems = [
