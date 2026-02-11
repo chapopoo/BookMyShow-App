@@ -1,14 +1,25 @@
 import React from "react";
-import { Button, Form, Input, message} from "antd";
+import { Button, Form, Input, message, Radio } from "antd";
 import { Link, useNavigate } from "react-router-dom"
 import { registerUser } from "../api/users";
 
 function Register() {
   const [messageApi, contextHolder] = message.useMessage();
   const navigate = useNavigate();
+
   const onFinishRegistrationForm = async (values) => {
+    // extract isAdmin and isPartner from values and restValues will contain the remaining properties of values object
+    const { isAdmin, isPartner, ...restValues } = values
+
+    if (isAdmin === "Admin") {
+      restValues.role = "Admin";
+    }
+    if (isPartner === "Partner") {
+      restValues.role = "Partner";
+    }
+
     try {
-      const response = await registerUser(values);
+      const response = await registerUser(restValues);
       if (response.success) {
         messageApi.success("User registration is Successful");
         navigate("/login");
@@ -81,6 +92,46 @@ function Register() {
 
                 ></Input>
               </Form.Item>
+
+              <Form.Item
+                label="Register as an Admin?"
+                htmlFor="isAdmin"
+                name="isAdmin"
+                className="d-block text-center"
+                rules={[{ required: true, message: "Please select an option!" }]}
+              >
+                <div className="d-flex justify-content-start">
+
+                  <Radio.Group
+                    name="radiogroup"
+                    className="flex-start"
+                  >
+                    <Radio value={'Admin'}>Yes</Radio>
+                    <Radio value={'user'}>No</Radio>
+                  </Radio.Group>
+                </div>
+              </Form.Item>
+
+              <Form.Item
+                label="Register as an Partner?"
+                htmlFor="isPartner"
+                name="isPartner"
+                className="d-block text-center"
+                // initialValue={false}
+                rules={[{ required: true, message: "Please select an option!" }]}
+              >
+                <div className="d-flex justify-content-start">
+
+                  <Radio.Group
+                    name="radiogroup"
+                    className="flex-start"
+                  >
+                    <Radio value={'Partner'}>Yes</Radio>
+                    <Radio value={'user'}>No</Radio>
+                  </Radio.Group>
+                </div>
+              </Form.Item>
+
 
               <Form.Item className="d-block">
                 <Button

@@ -14,10 +14,15 @@ const userScemaRules = {
         required: true,
         minLength: 5
     },
-    isAdmin:{
-        type: Boolean,
-        required: false,
-        default: false
+    // isAdmin:{
+    //     type: Boolean,
+    //     required: false,
+    //     default: false
+    // }
+    role:{
+        type:String,
+        required:true,
+        default:"user" //user, admin, partner
     }
 }
 
