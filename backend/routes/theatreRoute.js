@@ -1,11 +1,11 @@
 const express = require('express');
-const Theater = require('../model/theaterModel');
-const theaterRouter = express.Router();
+const Theatre = require('../model/theatreModel');
+const theatreRouter = express.Router();
 
-theaterRouter.post('/add-theatre', async (req, res) => {
+theatreRouter.post('/add-theatre', async (req, res) => {
     try{
-        const newTheater = new Theater(req.body);
-        await newTheater.save();
+        const newTheatre = new Theatre(req.body);
+        await newTheatre.save();
 
         res.send({
             success:true,
@@ -20,9 +20,9 @@ theaterRouter.post('/add-theatre', async (req, res) => {
     }
 })
 
-theaterRouter.put('/update-theatre', async (req, res) => {
+theatreRouter.put('/update-theatre', async (req, res) => {
     try{
-        await Theater.findByIdAndUpdate(req.body.theaterID, req.body);
+        await Theatre.findByIdAndUpdate(req.body.theatreID, req.body);
 
         res.send({
             success:true,
@@ -37,9 +37,9 @@ theaterRouter.put('/update-theatre', async (req, res) => {
     }
 })
 
-theaterRouter.delete('/delete-theatre', async (req, res) => {
+theatreRouter.delete('/delete-theatre', async (req, res) => {
     try{
-        await Theater.findByIdAndDelete(req.body.theaterID);
+        await Theatre.findByIdAndDelete(req.body.theatreID);
 
         res.send({
             success:true,
@@ -54,17 +54,17 @@ theaterRouter.delete('/delete-theatre', async (req, res) => {
     }
 });
 
-theaterRouter.get('/get-all-theatres', async (req, res) => {
+theatreRouter.get('/get-all-theatres', async (req, res) => {
     try{
         // This will by default omit all reference fields
         // When we populate the owner, EVERY field from Owner is included
         // this will populate the owner field with the corresponding user document or object from the users collection
-        const allTheaters = await Theater.find().populate("owner");
+        const allTheatres = await Theatre.find().populate("owner");
 
         res.send({
             success:true,
             message:"Theatres fetched Successfully!",
-            allTheaters
+            allTheatres
         })
     }
     catch(err){
@@ -75,9 +75,9 @@ theaterRouter.get('/get-all-theatres', async (req, res) => {
     }
 });
 
-theaterRouter.get("/get-all-theatres-by-owner/:ownerID", async (req, res) => {
+theatreRouter.get("/get-all-theatres-by-owner/:ownerID", async (req, res) => {
     try{
-        const allTheatresByOwner = await Theater.find({owner: req.params.ownerID});
+        const allTheatresByOwner = await Theatre.find({owner: req.params.ownerID});
 
         console.log(req.params.ownerID, allTheatresByOwner)
 
@@ -93,3 +93,5 @@ theaterRouter.get("/get-all-theatres-by-owner/:ownerID", async (req, res) => {
         })
     }
 })
+
+module.exports = theatreRouter;

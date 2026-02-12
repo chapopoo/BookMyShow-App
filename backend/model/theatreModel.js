@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const theaterSchema = new mongoose.Schema({
+const theatreSchema = new mongoose.Schema({
     name:{
         type: String,
         required: true,
@@ -31,5 +31,5 @@ const theaterSchema = new mongoose.Schema({
 )
 
 // this will create a collection named theaters in the database and the documents in that collection will follow the theaterSchema
-const Theater = mongoose.model('theaters', theaterSchema);
-mongoose.model.exports = Theater;
+const Theatre = mongoose.model('theatres', theatreSchema);
+module.exports = Theatre;

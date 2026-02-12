@@ -1,8 +1,9 @@
 const express = require("express");
 const app = express();
+const cors = require("cors");
 const userRouter = require("./routes/userRoute");
 const movieRouter = require("./routes/movieRoute");
-const cors = require("cors");
+const theatreRouter = require("./routes/theatreRoute");
 
 const dotenv = require("dotenv");
 dotenv.config(); //stores the environment variables from .env file in process.env
@@ -17,6 +18,7 @@ app.use(express.json()); //middleware to parse json data in request body, we can
 
 app.use("/api/user", userRouter);//registering root level route for userRouter
 app.use("/api/movies", movieRouter);
+app.use("/api/theatres", theatreRouter);
 
 const dbConfig = require("./config/db");
 
