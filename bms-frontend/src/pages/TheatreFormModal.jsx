@@ -15,7 +15,7 @@ const TheatreFormModal = ({ isModalOpen, setIsModalOpen, selectedTheatre, setSel
             if (formType === "add") {
                 response = await addTheatre({ ...values, owner: user._id });
             } else {
-                values.theatreId = selectedTheatre._id;
+                values.theatreID = selectedTheatre._id;
                 response = await updateTheatre(values);
             }
             console.log(response);

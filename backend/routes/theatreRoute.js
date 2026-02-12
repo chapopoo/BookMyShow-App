@@ -59,7 +59,7 @@ theatreRouter.get('/get-all-theatres', async (req, res) => {
         // This will by default omit all reference fields
         // When we populate the owner, EVERY field from Owner is included
         // this will populate the owner field with the corresponding user document or object from the users collection
-        const allTheatres = await Theatre.find().populate("owner");
+        const allTheatres = await Theatre.find().populate("owner", "name");
 
         res.send({
             success:true,
