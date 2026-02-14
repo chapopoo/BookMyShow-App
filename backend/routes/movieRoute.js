@@ -16,11 +16,11 @@ movieRouter.post("/addmovie", authMiddleware, async (req, res) => {
             data: newMovie
         })
     }
-    catch(e){
+    catch(err){
         res.status(500).send({
             success: false,
             message: "Internal Server Error",
-            error: e
+            error: err
         })
     }
 });
@@ -36,11 +36,11 @@ movieRouter.get("/get-all-movies", authMiddleware, async (req, res) => {
             movies
         })
     }
-    catch(e){
+    catch(err){
         res.status(500).send({
             success: false,
             message: "Internal Server Error",
-            error: e
+            error: err
             
         })
     }
@@ -58,11 +58,11 @@ movieRouter.put("/update-movie", authMiddleware, async (req, res) => {
             movie
         })
     }
-    catch(e){
+    catch(err){
         res.status(500).send({
             success: false,
             message: "Internal Server Error",
-            error: e
+            error: err
             
         })
     }

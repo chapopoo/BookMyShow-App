@@ -13,9 +13,10 @@ theatreRouter.post('/add-theatre', async (req, res) => {
         })
     }
     catch(err){
-        return res.send({
+        res.status(500).send({
             success: false,
-            message: err.message
+            message: "Internal Server Error",
+            error: err
         })
     }
 })
@@ -30,9 +31,10 @@ theatreRouter.put('/update-theatre', async (req, res) => {
         })
     }
     catch(err){
-        return res.send({
+        res.send({
             success: false,
-            message: err.message
+            message: "Internal Server Error",
+            error: err
         })
     }
 })
@@ -86,7 +88,7 @@ theatreRouter.get("/get-all-theatres-by-owner/:ownerID", async (req, res) => {
             message: "Theatres by owners fetched!",
             allTheatresByOwner
         })
-    } catch (error) {
+    } catch (err) {
         res.status(500).send({
             success: false,
             message: "Internal Server Error!",

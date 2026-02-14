@@ -47,7 +47,7 @@ userRouter.post("/register", async (req, res) => {
             data: user
         })
     }
-    catch(e) {
+    catch(err) {
         console.log(e)
         res.status(500).send({
             success: false,
@@ -102,8 +102,8 @@ userRouter.post("/login", async function(req, res){
             role:user.role
         })
     }
-    catch(e) {
-        console.log(e)
+    catch(err) {
+        console.log(err)
         res.status(500).send({
             success: false,
             message: "Internal Server Error"
@@ -129,7 +129,7 @@ userRouter.get("/get-current-user", authMiddleware, async function (req, res){
             success: true,
             user
         })
-    } catch (error) {
+    } catch (err) {
         res.status(500).send({
             success: false,
             message: "Something went wrong! Try again"

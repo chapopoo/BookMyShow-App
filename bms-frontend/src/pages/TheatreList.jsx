@@ -6,7 +6,7 @@ import { getAllTheatresByOwner } from '../api/theatres';
 import { useSelector, useDispatch } from 'react-redux';
 import { showLoading, hideLoading } from '../redux/loaderSlice';
 import TheatreFormModal from './TheatreFormModal';
-// import ShowModal from './ShowModal';
+import ShowModal from './ShowModal';
 
 
 const TheatreList = () => {
@@ -88,7 +88,7 @@ const TheatreList = () => {
                     <EditOutlined/>
                 </Button>
                 <Button onClick={ () => { setIsDeleteModalOpen(true); setSelectedTheatre(data); }}><DeleteOutlined/></Button>
-                {/* { data.isActive && <Button onClick={ () => { setIsShowModalOpen(true); setSelectedTheatre(data); }}>+ Shows</Button> } */}
+                {data.isActive && <Button onClick={ () => { setIsShowModalOpen(true); setSelectedTheatre(data); }}>+ Shows</Button>}
               </div>
             )
           }
@@ -109,9 +109,9 @@ const TheatreList = () => {
         {/* { 
             isDeleteModalOpen && <DeleteTheatreModal isDeleteModalOpen={isDeleteModalOpen} selectedTheatre={selectedTheatre} setIsDeleteModalOpen={setIsDeleteModalOpen} setSelectedTheatre={setSelectedTheatre} getData={getData} /> 
         } */}
-        {/* {
+        {
           isShowModalOpen && <ShowModal isShowModalOpen={isShowModalOpen} setIsShowModalOpen={setIsShowModalOpen} selectedTheatre={selectedTheatre}/>
-        } */}
+        } 
         </>
     );
 }
