@@ -33,6 +33,7 @@ const Home = () => {
 
   const handleSearch = (e) => {
     setSearchText(e.target.value);
+    // implement search functionality here, e.g., filter movies based on searchText
     console.log(searchText);
   }
 
