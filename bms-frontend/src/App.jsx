@@ -8,6 +8,7 @@ import store from './redux/store.js';
 import ProtectedRoute from './pages/ProtectedRoute.jsx';
 import Admin from './pages/Admin.jsx';
 import Partner from './pages/Partner.jsx';
+import SingleMovie from './pages/SingleMovie.jsx';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route path="/home" element={<ProtectedRoute><Admin/></ProtectedRoute>} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/movie/:id" element={<ProtectedRoute><SingleMovie/></ProtectedRoute>} />
         </Routes>
       </BrowserRouter>
     </Provider>

@@ -68,6 +68,27 @@ movieRouter.put("/update-movie", authMiddleware, async (req, res) => {
     }
 });
 
+// get details of single movie by its id 
+movieRouter.get('/movie/:id', authMiddleware, async (req, res) => {
+    try{
+        const movie = await Movie.findById(req.params.id);
+
+        res.send({
+            success: true,
+            message: "Movie fetched successfully",
+            data: movie
+        })
+    }
+    catch(err){
+        res.status(500).send({
+            success: false,
+            message: err.message
+        })
+    }
+})
+
+
+
 //get all movies via search text
 movieRouter.get("/get-all-movies-by-search-text/:text", authMiddleware, async (req, res) => {
     try {

@@ -33,7 +33,7 @@ const Home = () => {
 
   const handleSearch = (e) => {
     setSearchText(e.target.value);
-    // implement search functionality here, e.g., filter movies based on searchText
+    // implement backend search functionality here, e.g., filter movies based on searchText
     console.log(searchText);
   }
 
@@ -78,7 +78,7 @@ const Home = () => {
                   md={8}
                   lg={6}
                 >
-                  <div className="movie-card" style={{ boxShadow: '0 2px 8px #ddd', borderRadius: '12px', padding: '16px', background: '#fff', marginBottom: '24px', textAlign: 'center', height: '100%' }}>
+                  <div className="movie-card" style={{ boxShadow: '0 2px 8px #ddd', borderRadius: '12px', padding: '16px', background: '#fff', textAlign: 'center', height: '100%' }}>
                     <img
                       onClick={() => {
                         navigate(
@@ -90,7 +90,7 @@ const Home = () => {
                       alt="Movie Poster"
                       width={180}
                       height={260}
-                      style={{ borderRadius: "8px", objectFit: 'cover', marginBottom: '12px', boxShadow: '0 1px 6px #ccc' }}
+                      style={{ borderRadius: "8px", objectFit: 'cover', boxShadow: '0 1px 6px #ccc' }}
                     />
                     <h3
                       onClick={() => {
@@ -99,17 +99,17 @@ const Home = () => {
                         );
                       }}
                       className="cursor-pointer movie-title-details"
-                      style={{ fontWeight: 600, fontSize: '1.2rem', marginBottom: '8px', color: '#212121' }}
+                      style={{ fontWeight: 600, fontSize: '1.2rem', color: '#212121' }}
                     >
                       {movie.movieName}
                     </h3>
-                    <div className="movie-data">
+                    {/* <div className="movie-data">
                       <span>Genre:</span> {movie.genre} <br />
                       <span>Language:</span> {movie.language} <br />
                       <span>Duration:</span> {movie.duration} min <br />
                       <span>Release:</span> {new Date(movie.releaseDate).toLocaleDateString()}
                     </div>
-                    <div style={{ color: '#555', fontSize: '14px', marginTop: '8px', minHeight: '40px' }}>{movie.description}</div>
+                    <div style={{ color: '#555', fontSize: '14px', marginTop: '8px', minHeight: '40px' }}>{movie.description}</div> */}
                   </div>
                 </Col>
               ))}

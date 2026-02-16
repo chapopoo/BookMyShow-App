@@ -1,21 +1,21 @@
-import { axiosInstance} from "./axios";
+import { axiosInstance } from "./axios";
 
-const addMovie = async (value) =>{
-    try{
+const addMovie = async (value) => {
+    try {
         const response = await axiosInstance.post("/api/movies/addmovie", value)
         return response.data;
     }
-    catch(err){
+    catch (err) {
         throw err;
     }
 }
 
-const getAllMovies = async () =>{
-    try{
+const getAllMovies = async () => {
+    try {
         const response = await axiosInstance.get("/api/movies/get-all-movies")
         return response.data;
     }
-    catch(err){
+    catch (err) {
         throw err;
     }
 }
@@ -29,4 +29,13 @@ const updateMovie = async (value) => {
     }
 }
 
-export {addMovie, getAllMovies, updateMovie};
+const getMovieById = async (id) => {
+    try {
+        const response = await axiosInstance.get(`/api/movies/movie/${id}`)
+        return response.data;
+    } catch (err) {
+        return err.response
+    }
+}
+
+export { addMovie, getAllMovies, updateMovie, getMovieById};
