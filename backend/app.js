@@ -7,7 +7,11 @@ const theatreRouter = require("./routes/theatreRoute");
 const showRouter = require("./routes/showRoute");
 
 const dotenv = require("dotenv");
-dotenv.config(); //stores the environment variables from .env file in process.env
+dotenv.config(); 
+const bookingRouter = require("./routes/bookingRoute");
+
+// const dotenv = require("dotenv");
+// dotenv.config(); //stores the environment variables from .env file in process.env
 
 //CORS configuration
 app.use(cors({
@@ -21,6 +25,7 @@ app.use("/api/user", userRouter);//registering root level route for userRouter
 app.use("/api/movies", movieRouter);
 app.use("/api/theatres", theatreRouter);
 app.use("/api/shows", showRouter);
+app.use("/api/bookings", bookingRouter);
 
 const dbConfig = require("./config/db");
 

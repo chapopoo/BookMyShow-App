@@ -9,6 +9,7 @@ import ProtectedRoute from './pages/ProtectedRoute.jsx';
 import Admin from './pages/Admin.jsx';
 import Partner from './pages/Partner.jsx';
 import SingleMovie from './pages/SingleMovie.jsx';
+import BookShow from './pages/BookShow.jsx';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route path="/movie/:id" element={<ProtectedRoute><SingleMovie/></ProtectedRoute>} />
+          <Route path="/book-show/:id" element={<ProtectedRoute><BookShow/></ProtectedRoute>} />
         </Routes>
       </BrowserRouter>
     </Provider>
