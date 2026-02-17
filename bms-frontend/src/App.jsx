@@ -10,10 +10,12 @@ import Admin from './pages/Admin.jsx';
 import Partner from './pages/Partner.jsx';
 import SingleMovie from './pages/SingleMovie.jsx';
 import BookShow from './pages/BookShow.jsx';
+import Loader from './pages/Loader.jsx';
 
 function App() {
   return (
     <Provider store={store}>
+      <Loader />
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<ProtectedRoute><Home/></ProtectedRoute>} />
