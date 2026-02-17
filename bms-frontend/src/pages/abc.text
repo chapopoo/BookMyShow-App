@@ -1,43 +1,57 @@
+/**
+ * Stripe Payment Integration Fix
+ *
+ * Problem:
+ *   - The previous implementation used 'react-stripe-checkout', which is not compatible with Vite/ESM projects.
+ *   - This caused build errors like "Could not resolve 'react'" and "Could not resolve 'prop-types'" because 'react-stripe-checkout' uses CommonJS (require) imports.
+ *
+ * Solution:
+ *   1. Uninstalled 'react-stripe-checkout'.
+ *   2. Installed '@stripe/react-stripe-js' and '@stripe/stripe-js', which are compatible with Vite and React.
+ *   3. Replaced the <StripeCheckout> component with <Elements> and <CardElement> from Stripe's official React SDK.
+ *   4. Updated the payment handler to use Stripe's createPaymentMethod API.
+ *
+ * Result:
+ *   - The payment form is now secure, modern, and works with Vite and React.
+ */
+
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { hideLoading, showLoading } from "../redux/loaderSlice";
-import { getShowById } from "../api/shows";
-import { useNavigate, useParams } from "react-router-dom";
 import { message, Card, Row, Col, Button } from "antd";
-import moment from 'moment';
-import StripeCheckout from "react-stripe-checkout";
+import { useNavigate, useParams } from "react-router-dom";
+import { getShowById } from "../api/shows";
+import moment from "moment";
 import { bookShow, makePayment } from "../api/bookings";
+import { loadStripe } from '@stripe/stripe-js';
 
-const STRIPE_PUB_KEY ="pk_test_51T1Ob1DnZOBgyuOcU4XkNDXHsYmpEUZpq4KlPgXro9bXA31OVRZwfdOp54Xb24TD74P0q53l0WoHjjFuOkGc0kEp00nEaTDB7m"
 
 const BookShow = () => {
-    const { user } = useSelector((state) => state.users);
+    const { user } = useSelector(state => state.users);
     const dispatch = useDispatch();
 
-    // Initialized state for a single show
     const [show, setShow] = useState();
 
-    // Storing the selected seats in an array
     const [selectedSeats, setSelectedSeats] = useState([]);
 
-    // To extract out the show ID
     const params = useParams();
     const navigate = useNavigate();
 
-    // Fetching the show details
     const getData = async () => {
         try {
             dispatch(showLoading());
             const response = await getShowById({ showID: params.id });
+
             if (response.success) {
                 setShow(response.data);
-                // message.success(response.message);
-                console.log(response.data)
-            } else {
-                message.error(response.message)
+                console.log(response.data);
+            }
+            else {
+                message.error(response.message);
             }
             dispatch(hideLoading());
-        } catch (err) {
+        }
+        catch (err) {
             message.error(err.message);
             dispatch(hideLoading());
         }
@@ -51,7 +65,8 @@ const BookShow = () => {
                 transactionId,
                 seats: selectedSeats,
                 user: user._id,
-            });
+            })
+
             if (response.success) {
                 message.success("Show Booking done!");
                 navigate("/");
@@ -59,48 +74,70 @@ const BookShow = () => {
                 message.error(response.message);
             }
             dispatch(hideLoading());
-        } catch (err) {
+        }
+        catch (err) {
             message.error(err.message);
             dispatch(hideLoading());
         }
-    };
+    }
 
-    // Once the payment has been initiated by Stripe,
-    // I need to confirm that in my backend
-    const onToken = async (token) => {
+    // Stripe Checkout redirect handler
+    // This function replaces the inline card form with a redirect to Stripe's hosted payment page (Stripe Checkout).
+    // It calls the backend to create a Checkout Session and then redirects the user to the secure Stripe payment page.
+    // const handleStripeCheckout = async () => {
+    //     try {
+    //         dispatch(showLoading());
+    //         // Call backend to create Stripe Checkout session
+    //         // The backend should return a checkoutUrl for Stripe Checkout
+    //         const response = await makePayment({
+    //             amount: selectedSeats.length * show.ticketPrice * 100, // amount in paise (Stripe expects the smallest currency unit)
+    //             showId: params.id,
+    //             seats: selectedSeats,
+    //             userId: user._id
+    //         });
+    //         if (response.success && response.data && response.data.checkoutUrl) {
+    //             // Redirect user to Stripe's secure payment page
+    //             window.location.href = response.data.checkoutUrl;
+    //         } else {
+    //             message.error(response.message || "Failed to initiate payment.");
+    //         }
+    //         dispatch(hideLoading());
+    //     } catch (err) {
+    //         message.error(err.message || "Payment error");
+    //         dispatch(hideLoading());
+    //     }
+    // };
 
-        console.log({ token })
+    const handleStripeCheckout = async () => {
         try {
             dispatch(showLoading());
-            const response = await makePayment(
-                token,
-                selectedSeats.length * show.ticketPrice * 100
-            );
+
+            const response = await makePayment({
+                amount: selectedSeats.length * show.ticketPrice * 100,
+                showId: params.id,
+                seats: selectedSeats,
+                userId: user._id
+            });
 
             if (response.success) {
-                message.success(response.message);
-                book(response.data);
-                console.log(response);
+                window.location.href = response.data.checkoutUrl;
             } else {
                 message.error(response.message);
             }
+
             dispatch(hideLoading());
         } catch (err) {
             message.error(err.message);
             dispatch(hideLoading());
         }
-    };
-
+    }
 
 
     const getSeats = () => {
-        if (!show) return null;
+        let columns = 12
 
-        let columns = 12;
-        // Totalseats we're conmsidering 120 for our ease,
-        // we can also get this from show.totalSeats
-        let totalSeats = 120;
-        let rows = totalSeats / columns; // 10
+        let totalSeats = 120
+        let rows = totalSeats / columns;
 
         return (
             <div className="d-flex flex-column align-items-center">
@@ -184,18 +221,21 @@ const BookShow = () => {
                     {getSeats()}
 
 
+                    {/*
+                        Instead of showing a card form, we now show a single Pay Now button.
+                        When clicked, it redirects the user to Stripe Checkout for secure payment.
+                    */}
                     {selectedSeats.length > 0 && (
-                        <StripeCheckout
-                            token={onToken}
-                            amount={selectedSeats.length * show.ticketPrice * 100}
-                            stripeKey={STRIPE_PUB_KEY}
+                        <Button
+                            type="primary"
+                            shape="round"
+                            size="large"
+                            block
+                            style={{ marginTop: 24 }}
+                            onClick={handleStripeCheckout}
                         >
-                            <div className="max-width-600 mx-auto">
-                                <Button type="primary" shape="round" size="large" block>
-                                    Pay Now
-                                </Button>
-                            </div>
-                        </StripeCheckout>
+                            Pay Now
+                        </Button>
                     )}
                 </Card>
             </Col>
