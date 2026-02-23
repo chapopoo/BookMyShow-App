@@ -29,4 +29,21 @@ const getCurrentUser = async () => {
     }
 }
 
-export {registerUser, loginUser, getCurrentUser};
+const forgetPassword = async (value) => {
+    try {
+        const response = await axiosInstance.post("/api/user/forgetpassword", value)
+        return response.data
+    } catch (error) {
+        throw error
+    }
+}
+
+const resetPassword = async () => {
+    try {
+        const response = await axiosInstance.post("/api/user/resetpassword", value)
+        return response.data
+    } catch (error) {
+        throw error
+    }
+}
+export {registerUser, loginUser, getCurrentUser, forgetPassword, resetPassword};

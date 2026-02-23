@@ -1,15 +1,15 @@
 const mongoose = require("mongoose");
 
 const userScemaRules = {
-    name:{
+    name: {
         type: String,
         required: true
     },
-    email:{
+    email: {
         type: String,
         required: true
     },
-    password:{
+    password: {
         type: String,
         required: true,
         minLength: 5
@@ -19,11 +19,17 @@ const userScemaRules = {
     //     required: false,
     //     default: false
     // }
-    role:{
-        type:String,
-        required:true,
-        default:"user" //user, admin, partner
-    }
+    role: {
+        type: String,
+        required: true,
+        default: "user" //user, admin, partner
+    },
+    otp: {
+        type: String,
+    },
+    otpExpiry: {
+        type: Date,
+    },
 }
 
 const userScema = new mongoose.Schema(userScemaRules)

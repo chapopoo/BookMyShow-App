@@ -1,16 +1,18 @@
 import './App.css'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { Provider } from 'react-redux';
-import Home from './pages/Home.jsx'
-import Login from './pages/Login.jsx'
-import Register from './pages/Register.jsx'
-import store from './redux/store.js';
-import ProtectedRoute from './pages/ProtectedRoute.jsx';
-import Admin from './pages/Admin.jsx';
-import Partner from './pages/Partner.jsx';
-import SingleMovie from './pages/SingleMovie.jsx';
-import BookShow from './pages/BookShow.jsx';
-import Loader from './pages/Loader.jsx';
+import Home from './pages/Home'
+import Login from './pages/Login'
+import Register from './pages/Register'
+import store from './redux/store';
+import ProtectedRoute from './pages/ProtectedRoute';
+import Admin from './pages/Admin';
+import Partner from './pages/Partner';
+import SingleMovie from './pages/SingleMovie';
+import BookShow from './pages/BookShow';
+import Loader from './pages/Loader';
+import Forget from './pages/Forget';
+// import Reset from './pages/Reset'
 
 function App() {
   return (
@@ -25,6 +27,8 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/movie/:id" element={<ProtectedRoute><SingleMovie/></ProtectedRoute>} />
           <Route path="/book-show/:id" element={<ProtectedRoute><BookShow/></ProtectedRoute>} />
+          <Route path='/forget' element={<Forget />} />
+          {/* <Route path='/reset' element={<Reset />} /> */}
         </Routes>
       </BrowserRouter>
     </Provider>
