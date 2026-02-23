@@ -5,6 +5,7 @@ const validator = require("email-validator");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const authMiddleware = require("../middlewares/authMiddleware");
+const emailHelper = require("../config/emailHelper")
 
 const SALT_Rounds = 12;
 
@@ -227,7 +228,7 @@ userRouter.post("/resetpassword", async function(req, res){
             })
         }
 
-        if(user.otpExpiry > Date.now()){
+        if(user.otpExpiry < Date.now()){
             return res.status(404).json({
                 status: "failure",
                 message: "OTP is Expired"

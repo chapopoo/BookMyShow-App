@@ -12,7 +12,7 @@ import SingleMovie from './pages/SingleMovie';
 import BookShow from './pages/BookShow';
 import Loader from './pages/Loader';
 import Forget from './pages/Forget';
-// import Reset from './pages/Reset'
+import Reset from './pages/Reset'
 
 function App() {
   return (
@@ -28,7 +28,7 @@ function App() {
           <Route path="/movie/:id" element={<ProtectedRoute><SingleMovie/></ProtectedRoute>} />
           <Route path="/book-show/:id" element={<ProtectedRoute><BookShow/></ProtectedRoute>} />
           <Route path='/forget' element={<Forget />} />
-          {/* <Route path='/reset' element={<Reset />} /> */}
+          <Route path='/reset' element={<Reset />} />
         </Routes>
       </BrowserRouter>
     </Provider>

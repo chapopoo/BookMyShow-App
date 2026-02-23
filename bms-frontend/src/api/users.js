@@ -38,7 +38,7 @@ const forgetPassword = async (value) => {
     }
 }
 
-const resetPassword = async () => {
+const resetPassword = async (value) => {
     try {
         const response = await axiosInstance.post("/api/user/resetpassword", value)
         return response.data
