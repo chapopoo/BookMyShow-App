@@ -4,6 +4,7 @@ const stripe = Stripe(process.env.STRIPE_KEY);
 const authMiddleware = require('../middlewares/authMiddleware');
 const Booking = require('../model/bookingModel');
 const Show = require('../model/showModel');
+const UserModel = require('../model/userModel');
 
 console.log('Stripe Key:', process.env.STRIPE_KEY); // Debug log for Stripe key
 
@@ -47,7 +48,7 @@ bookingRouter.post('/book-show', authMiddleware, async (req, res) => {
         const newBooking = new Booking(req.body);
         await newBooking.save();
 
-        const show = await Show.findById(req.body.show).populate("movie");
+        const show = await Show.findById(req.body.show).populate("movie").populate("theatre");
         const updatedBookedSeats = [...show.bookedSeats, ...req.body.seats];
         await Show.findByIdAndUpdate(req.body.show, { bookedSeats: updatedBookedSeats });
         res.send({
@@ -55,6 +56,24 @@ bookingRouter.post('/book-show', authMiddleware, async (req, res) => {
             message: 'New Booking done!',
             data: newBooking
         });
+
+        const user = await UserModel.findById(newBooking.user)
+
+        console.log({ user })
+
+        await emailHelper("ticket.html", user.email, {
+            name: user.name,
+            movie: show.movie.movieName,
+            theatre: show.theatre.name,
+            date: show.date,
+            time: show.time,
+            seats: newBooking.seats,
+            amount: newBooking.seats.length * show.ticketPrice,
+            transactionId: newBooking.transactionId,
+        });
+
+        console.log("Email sent")
+
     }catch(err){
         res.send({
             success: false,
