@@ -5,6 +5,7 @@ const authMiddleware = require('../middlewares/authMiddleware');
 const Booking = require('../model/bookingModel');
 const Show = require('../model/showModel');
 const UserModel = require('../model/userModel');
+const emailHelper = require("../config/emailHelper")
 
 console.log('Stripe Key:', process.env.STRIPE_KEY); // Debug log for Stripe key
 
