@@ -13,6 +13,7 @@ import BookShow from './pages/BookShow';
 import Loader from './pages/Loader';
 import Forget from './pages/Forget';
 import Reset from './pages/Reset'
+import Profile from './pages/Profile'
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
           <Route path="/" element={<ProtectedRoute><Home/></ProtectedRoute>} />
           <Route path="/partner" element={<ProtectedRoute><Partner/></ProtectedRoute>} />
           <Route path="/home" element={<ProtectedRoute><Admin/></ProtectedRoute>} />
+          <Route path="/profile" element={<ProtectedRoute><Profile/></ProtectedRoute>} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route path="/movie/:id" element={<ProtectedRoute><SingleMovie/></ProtectedRoute>} />
