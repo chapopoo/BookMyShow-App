@@ -1,7 +1,7 @@
 import React from 'react'
 import { Button, Card, Col, Row, message } from "antd";
 import { useEffect, useState } from "react";
-import { HideLoading, ShowLoading } from "../redux/loaderSlice";
+import { hideLoading, showLoading} from "../redux/loaderSlice";
 import { getAllBookings } from "../api/bookings";
 import { useDispatch } from "react-redux";
 import moment from "moment";
@@ -13,7 +13,7 @@ const Profile = () => {
 
   const getData = async () => {
     try {
-      dispatch(ShowLoading());
+      dispatch(showLoading());
       const response = await getAllBookings();
       if (response.success) {
         setBookings(response.data);
@@ -21,10 +21,10 @@ const Profile = () => {
         message.error(response.message);
       }
 
-      dispatch(HideLoading());
+      dispatch(hideLoading());
     } catch (err) {
       message.error(err.message);
-      dispatch(HideLoading());
+      dispatch(hideLoading());
     }
   };
 
