@@ -6,6 +6,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const authMiddleware = require("../middlewares/authMiddleware");
 const emailHelper = require("../config/emailHelper")
+const {registerUser} = require("../controllers/userController");
 
 const SALT_Rounds = 12;
 
@@ -15,53 +16,7 @@ const otpGenerator = function () {
     return Math.floor((Math.random() * 10000) + 90000);
 }
 
-userRouter.post("/register", async (req, res) => {
-    try {
-        const isEmailValid = validator.validate(req.body.email)
-
-        if (!isEmailValid) {
-            return res.status(500).send({
-                success: false,
-                message: "Please enter a valid email"
-            })   
-        }
-
-        //checking if user with the email already exists
-        const isUserPresent = await UserModel.findOne({
-            email: req.body.email
-        }) 
-        if(isUserPresent){
-           return res.status(500).send({
-                success: false,
-                userPresentError: true,
-                message: "User with this email already exists"
-            })
-        }
-
-        const user = new UserModel(req.body); //creating new user object locally
-
-        //generating a salt and hashing the password with the salt
-        const gensalt = await bcrypt.genSalt(SALT_Rounds) 
-        const hashedpassword = await bcrypt.hash(req.body.password, gensalt) 
-
-        user.password = hashedpassword; //setting the hashed password to the user object
-
-        await user.save(); //saving the user object to the database
-
-        res.send({
-            success: true,
-            message: "User registered successfully",
-            data: user
-        })
-    }
-    catch(err) {
-        console.log(e)
-        res.status(500).send({
-            success: false,
-            message: "Internal Server Error"
-        })
-    }
-})
+userRouter.post("/register", registerUser);
 
 userRouter.post("/login", async function(req, res){
     try {
