@@ -1,18 +1,21 @@
-import React from 'react'
+import React from "react";
 import { Button, Form, Input, message } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import { loginUser } from "../api/users";
+import movieImg from "../assets/Img1.jpg";
 
 function Login() {
   const [messageApi, contextHolder] = message.useMessage();
   const navigate = useNavigate();
+
   const onFinishLoginForm = async (values) => {
     try {
       const response = await loginUser(values);
+
       if (response.success) {
         messageApi.success("Logged in Successfully");
         localStorage.setItem("token", response.token);
-        
+
         if (response.role === "Admin") {
           return navigate("/home");
         }
@@ -20,82 +23,86 @@ function Login() {
           return navigate("/partner");
         }
         return navigate("/");
-      }
-      else {
+      } else {
         messageApi.error("Something went wrong");
       }
+    } catch (err) {
+      messageApi.error("Something went wrong!");
+      console.log("error", err);
     }
-    catch (err) {
-      messageApi.error("Something went wrong!")
-      console.log("error", err)
-    }
-  }
+  };
 
   return (
     <>
       {contextHolder}
-      <header className="App-header">
-        <main className="main-area mw-500 text-center px-3">
-          <section className="left-section">
-            <h1>Login to BookMyShow</h1>
-          </section>
 
-          <section className="right-section">
-            <Form onFinish={onFinishLoginForm} layout="vertical">
+      <div className="register-page">
+        
+        {/* LEFT SIDE (Same as Register) */}
+        <div
+          className="left-panel"
+          style={{
+            backgroundImage: `url(${movieImg})`,
+          }}
+        >
+          <div className="overlay">
+            <h1>🎬 BookMyShow</h1>
+            <p>Welcome back! Book your favorite shows</p>
+          </div>
+        </div>
 
+        {/* RIGHT SIDE */}
+        <div className="right-panel">
+          <div className="register-card">
+
+            <h2>Welcome Back!, Lets Login</h2>
+
+            <Form
+              onFinish={onFinishLoginForm}
+              layout="vertical"
+              size="large"
+            >
               <Form.Item
                 label="Email"
-                htmlFor="email"
                 name="email"
-                className="d-block"
-                rules={[{ required: true, message: "Email is required" }]}
+                rules={[
+                  { required: true, message: "Email is required" },
+                  { type: "email", message: "Enter valid email" }
+                ]}
               >
-                <Input
-                  id="email"
-                  type="text"
-                  placeholder="Enter your Email"
-                ></Input>
+                <Input placeholder="Enter your email" />
               </Form.Item>
 
               <Form.Item
                 label="Password"
-                htmlFor="password"
                 name="password"
-                className="d-block"
-                rules={[{ required: true, message: "Password is required" }]}
+                rules={[
+                  { required: true, message: "Password is required" }
+                ]}
               >
-                <Input
-                  id="password"
-                  type="password"
-                  placeholder="Enter your Password"
-
-                ></Input>
+                <Input.Password placeholder="Enter your password" />
               </Form.Item>
 
-              <Form.Item className="d-block">
-                <Button
-                  type="primary"
-                  block
-                  htmlType="submit"
-                  style={{ fontSize: "1rem", fontWeight: "600" }}
-                >
+              <Form.Item>
+                <Button className="custom-btn" block htmlType="submit">
                   Login
                 </Button>
               </Form.Item>
             </Form>
-            <div>
-              <p>
-                New User? <Link to="/register">Register Here</Link>
-              </p>
-              <p>
-                Forgot Password? <Link to="/forget">Click Here</Link>
-              </p>
-            </div>
-          </section>
-        </main>
-      </header>
+
+            <p className="login-text">
+              New user? <Link to="/register">Create an account</Link>
+            </p>
+
+            <p className="login-text">
+              Forgot password? <Link to="/forget">Reset here</Link>
+            </p>
+
+          </div>
+        </div>
+      </div>
     </>
-  )
+  );
 }
 
-export default Login
+export default Login;
