@@ -1,12 +1,10 @@
 const express = require("express");
 const UserModel = require("../model/userModel");
 const userRouter = express.Router(); //creates a router object to handle routes for user-related operations
-const validator = require("email-validator");
 const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
 const authMiddleware = require("../middlewares/authMiddleware");
 const emailHelper = require("../config/emailHelper")
-const {registerUser} = require("../controllers/userController");
+const {registerUser, loginUser} = require("../controllers/userController");
 
 const SALT_Rounds = 12;
 
@@ -18,60 +16,7 @@ const otpGenerator = function () {
 
 userRouter.post("/register", registerUser);
 
-userRouter.post("/login", async function(req, res){
-    try {
-        const user = await UserModel.findOne({
-            email:req.body.email
-        }); //finding the user object from the database
-        
-        console.log(user)
-        if(!user){
-            return res.status(404).send({
-                success:false,
-                message:"User not found"
-            })
-        }
-
-        //checking password
-        // if(user.password !== req.body.password){
-        //     return res.status(404).send({
-        //         success:false,
-        //         message:"No user/pass combo found"
-        //     })
-        // }
-
-        const isPasswordValid = await bcrypt.compare(req.body.password, user.password)
-        if(!isPasswordValid){
-            return res.status(404).send({
-                success:false,
-                message:"No email/password combo found"
-            })
-        }
-
-        //start my JWT token generation
-        const token = jwt.sign(
-            {
-                userId: user._id
-            },
-            process.env.JWT_SECRET,
-            {expiresIn: "1d"}
-        )
-
-        res.send({
-            success: true,
-            message: "Logged In successfully",
-            token,
-            role:user.role
-        })
-    }
-    catch(err) {
-        console.log(err)
-        res.status(500).send({
-            success: false,
-            message: "Internal Server Error"
-        })
-    }
-})
+userRouter.post("/login", loginUser);
 
 userRouter.get("/get-current-user", authMiddleware, async function (req, res){
     try {

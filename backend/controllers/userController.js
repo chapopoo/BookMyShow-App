@@ -19,4 +19,23 @@ const registerUser = async (req, res) => {
     }
 };
 
-module.exports = { registerUser };
+const loginUser = async (req, res) => {
+    try {
+        console.log(req.body);
+        const result = await userService.loginUser(req.body);
+
+        res.send({
+            success: true,
+            message: "Logged in successfully",
+            ...result
+        });
+
+    } catch (err) {
+        res.status(err.statusCode || 500).send({
+            success: false,
+            message: err.message
+        });
+    }
+};
+
+module.exports = { registerUser, loginUser };
