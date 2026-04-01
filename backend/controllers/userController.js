@@ -38,4 +38,52 @@ const loginUser = async (req, res) => {
     }
 };
 
-module.exports = { registerUser, loginUser };
+const getCurrentUser = async (req, res) => {
+    try {
+        const result = await userService.getCurrentUser(req, res);
+        res.send({
+            success: true,
+            message: "Logged in successfully",
+            ...result
+        });
+
+    } catch (err) {
+        res.status(err.statusCode || 500).send({
+            success: false,
+            message: err.message
+        });
+    }
+}
+
+const forgetPassword = async (req, res) => {
+    try {
+        const result = await userService.forgetPassword(req.body);
+
+        res.status(200).json({
+            success: true,
+            ...result
+        });
+    } catch (err) {
+        res.status(err.statusCode || 500).json({
+            success: false,
+            message: err.message
+        });
+    }
+};
+
+const resetPassword = async (req, res) => {
+    try {
+        const result = await userService.resetPassword(req.body);
+
+        res.status(200).json({
+            success: true,
+            ...result
+        });
+    } catch (err) {
+        res.status(err.statusCode || 500).json({
+            success: false,
+            message: err.message
+        });
+    }
+};
+module.exports = { registerUser, loginUser, getCurrentUser, forgetPassword, resetPassword };
