@@ -2,6 +2,8 @@ import React from "react";
 import { Button, Form, Input, message, Radio } from "antd";
 import { Link, useNavigate } from "react-router-dom"
 import { registerUser } from "../api/users";
+import { showLoading } from "../redux/loaderSlice"
+import movieImg from "../assets/Img1.jpg";
 
 function Register() {
   const [messageApi, contextHolder] = message.useMessage();
@@ -29,131 +31,99 @@ function Register() {
       }
     }
     catch (err) {
-      if (response.userPresentError) {
-        messageApi.error("Email is already taken!!")
-      } else {
-        messageApi.error("Something went wrong!")
-        console.log("error", err)
-      }
+      messageApi.error(err.response.data.message)
+      console.log("error", err)
     }
   }
   return (
     <>
       {contextHolder}
-      <header className="App-header">
-        <main className="main-area mw-500 text-center px-3">
-          <section className="left-section">
-            <h1>Register to BookMyShow</h1>
-          </section>
 
-          <section className="right-section">
-            <Form onFinish={onFinishRegistrationForm} layout="vertical">
+      <div className="register-page">
+
+        {/* LEFT SIDE */}
+        <div
+          className="left-panel"
+          style={{
+            backgroundImage: `url(${movieImg})`,
+          }}
+        >
+          <div className="overlay">
+            <h1>🎬 BookMyShow</h1>
+            <p>Book tickets for movies, events & more</p>
+          </div>
+        </div>
+
+        {/* RIGHT SIDE */}
+        <div className="right-panel">
+          <div className="register-card">
+
+            <h2>Create Account</h2>
+
+            <Form
+              onFinish={onFinishRegistrationForm}
+              layout="vertical"
+              size="large"
+            >
               <Form.Item
                 label="Name"
-                htmlFor="name"
                 name="name"
-                className="d-block"
                 rules={[{ required: true, message: "Name is required" }]}
               >
-                <Input
-                  id="name"
-                  type="text"
-                  placeholder="Enter your name"
-
-                ></Input>
+                <Input placeholder="Enter your name" />
               </Form.Item>
 
               <Form.Item
                 label="Email"
-                htmlFor="email"
                 name="email"
-                className="d-block"
-                rules={[{ required: true, message: "Email is required" }]}
+                rules={[
+                  { required: true },
+                  { type: "email", message: "Enter valid email" }
+                ]}
               >
-                <Input
-                  id="email"
-                  type="text"
-                  placeholder="Enter your Email"
-
-                ></Input>
+                <Input placeholder="Enter your email" />
               </Form.Item>
 
               <Form.Item
                 label="Password"
-                htmlFor="password"
                 name="password"
-                className="d-block"
-                rules={[{ required: true, message: "Password is required" }]}
+                rules={[
+                  { required: true },
+                  { min: 6, message: "Minimum 6 characters" }
+                ]}
               >
-                <Input
-                  id="password"
-                  type="password"
-                  placeholder="Enter your Password"
-
-                ></Input>
+                <Input.Password placeholder="Enter password" />
               </Form.Item>
 
+              {/* ROLE SELECTION */}
               <Form.Item
-                label="Register as an Admin?"
-                htmlFor="isAdmin"
-                name="isAdmin"
-                className="d-block text-center"
-                rules={[{ required: true, message: "Please select an option!" }]}
+                label="Select Role"
+                name="role"
+                rules={[{ required: true }]}
               >
-                <div className="d-flex justify-content-start">
-
-                  <Radio.Group
-                    name="radiogroup"
-                    className="flex-start"
-                  >
-                    <Radio value={'Admin'}>Yes</Radio>
-                    <Radio value={'user'}>No</Radio>
-                  </Radio.Group>
-                </div>
+                <Radio.Group>
+                  <Radio value="User">User</Radio>
+                  <Radio value="Admin">Admin</Radio>
+                  <Radio value="Partner">Partner</Radio>
+                </Radio.Group>
               </Form.Item>
 
-              <Form.Item
-                label="Register as an Partner?"
-                htmlFor="isPartner"
-                name="isPartner"
-                className="d-block text-center"
-                // initialValue={false}
-                rules={[{ required: true, message: "Please select an option!" }]}
-              >
-                <div className="d-flex justify-content-start">
-
-                  <Radio.Group
-                    name="radiogroup"
-                    className="flex-start"
-                  >
-                    <Radio value={'Partner'}>Yes</Radio>
-                    <Radio value={'user'}>No</Radio>
-                  </Radio.Group>
-                </div>
-              </Form.Item>
-
-
-              <Form.Item className="d-block">
-                <Button
-                  type="primary"
-                  block
-                  htmlType="submit"
-                  style={{ fontSize: "1rem", fontWeight: "600" }}
-                >
+              <Form.Item>
+                <Button className="custom-btn" block htmlType="submit">
                   Register
                 </Button>
               </Form.Item>
             </Form>
-            <div>
-              <p>
-                Already a user? <Link to="/login">Login now</Link>
-              </p>
-            </div>
-          </section>
-        </main>
-      </header>
+
+            <p className="login-text">
+              Already a user? <Link to="/login">Login now</Link>
+            </p>
+
+          </div>
+        </div>
+
+      </div>
     </>
   );
 }
-
 export default Register;
