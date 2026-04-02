@@ -5,115 +5,115 @@ import { useDispatch } from 'react-redux';
 import { message, Button, Table } from 'antd';
 
 const TheatresTable = () => {
-    const [theatres, setTheatres] = useState([]);
-    const dispatch = useDispatch();
+  const [theatres, setTheatres] = useState([]);
+  const dispatch = useDispatch();
 
-    const getData = async () => {
-        try{
-          dispatch(showLoading());
-          const response = await getAllTheatres();
-          if(response.success){
-            const allTheatres = response.allTheatres;
-            setTheatres(
-              allTheatres.map(function(item){
-                return {...item, key: `theatre${item._id}`}
-              })
-              );
-          }else{
-            message.error(response.message)
-          }
-          dispatch(hideLoading())
-  
-        }catch(err){
-          dispatch(hideLoading());
-          message.error(err.message);
-        }
+  const getData = async () => {
+    try {
+      dispatch(showLoading());
+      const response = await getAllTheatres();
+      if (response.success) {
+        const allTheatres = response.data;
+        setTheatres(
+          allTheatres.map(function (item) {
+            return { ...item, key: `theatre${item._id}` }
+          })
+        );
+      } else {
+        message.error(response.message)
       }
+      dispatch(hideLoading())
 
-      const handleStatusChange = async (theatre) => {
-        console.log(theatre);
-        try{
-          dispatch(showLoading());
-          let values = {...theatres, theatreID: theatre._id, isActive: !theatre.isActive}
-          console.log(values);
-          const response = await updateTheatre(values);
-          if(response.success){
-            message.success(response.message);
-            getData();
-          }
-          dispatch(hideLoading());
-        }catch(err){
-          dispatch(hideLoading());
-          message.error(err.message);
-        }
-      }
+    } catch (err) {
+      dispatch(hideLoading());
+      message.error(err.message);
+    }
+  }
 
-    const columns = [
-        {
-          title: 'Name',
-          dataIndex: 'name',
-          key: 'name'
-        },
-        {
-          title: 'Address',
-          dataIndex: 'address',
-          key: 'address',
-        },
-        {
-            title: 'Owner',
-            dataIndex: 'owner',
-            render: (text, data) => {
-                return data.owner && data.owner.name;
-            }
-        },
-        {
-          title: 'Phone Number',
-          dataIndex: 'phone',
-          key: 'phone',
-        },
-        {
-          title: 'Email',
-          dataIndex: 'email',
-          key: 'email'
-        },
-        {
-          title: 'Status',
-          dataIndex: 'isActive',
-          render: (isActive) => {
-            if(isActive){
-                return 'Approved'
-            }else{
-                return 'Pending/ Blocked'
-            }
-          }
-        },
-        {
-          title: 'Action',
-          dataIndex: 'action',
-          render: (text, data) => {
-            return(
-              <div className='d-flex align-items-center gap-10'>
-                { data.isActive 
-                ?
-                <Button onClick={() => handleStatusChange(data)}>Block</Button>
-                : <Button onClick={() => handleStatusChange(data)}>Approve</Button>  }
-              </div>
-            )
-          }
-        },
-      ];
-
-      useEffect(() => {
+  const handleStatusChange = async (theatre) => {
+    console.log(theatre);
+    try {
+      dispatch(showLoading());
+      let values = { ...theatres, theatreID: theatre._id, isActive: !theatre.isActive }
+      console.log(values);
+      const response = await updateTheatre(values);
+      if (response.success) {
+        message.success(response.message);
         getData();
-      }, []);
+      }
+      dispatch(hideLoading());
+    } catch (err) {
+      dispatch(hideLoading());
+      message.error(err.message);
+    }
+  }
 
-      // console.log(theatres.length > 0 && theatres);
+  const columns = [
+    {
+      title: 'Name',
+      dataIndex: 'name',
+      key: 'name'
+    },
+    {
+      title: 'Address',
+      dataIndex: 'address',
+      key: 'address',
+    },
+    {
+      title: 'Owner',
+      dataIndex: 'owner',
+      render: (text, data) => {
+        return data.owner && data.owner.name;
+      }
+    },
+    {
+      title: 'Phone Number',
+      dataIndex: 'phone',
+      key: 'phone',
+    },
+    {
+      title: 'Email',
+      dataIndex: 'email',
+      key: 'email'
+    },
+    {
+      title: 'Status',
+      dataIndex: 'isActive',
+      render: (isActive) => {
+        if (isActive) {
+          return 'Approved'
+        } else {
+          return 'Pending/ Blocked'
+        }
+      }
+    },
+    {
+      title: 'Action',
+      dataIndex: 'action',
+      render: (text, data) => {
+        return (
+          <div className='d-flex align-items-center gap-10'>
+            {data.isActive
+              ?
+              <Button onClick={() => handleStatusChange(data)}>Block</Button>
+              : <Button onClick={() => handleStatusChange(data)}>Approve</Button>}
+          </div>
+        )
+      }
+    },
+  ];
 
-    return(
-      <>
-        {theatres && theatres.length > 0 && <Table dataSource={theatres} columns={columns} />}
-      </>
-    )
+  useEffect(() => {
+    getData();
+  }, []);
+
+  // console.log(theatres.length > 0 && theatres);
+
+  return (
+    <>
+      {theatres && theatres.length > 0 && <Table dataSource={theatres} columns={columns} />}
+    </>
+  )
 }
 
 export default TheatresTable;
