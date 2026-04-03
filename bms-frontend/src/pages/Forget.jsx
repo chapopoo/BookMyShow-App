@@ -7,14 +7,14 @@ function Forget(){
     const onFinish = async (values) => {
         try{
             const response = await forgetPassword(values);
-            if(response.status === "success"){
+            if(response.success){
                 message.success(response.message)
                 alert("OTP sent to your email")
                 // window.location.href = '/reset' // redirects to /reset url
                 navigate("/reset");
             }
             else{
-                 message.error(response.message)
+                message.error(response.message)
             }
         }
         catch(err){

@@ -3,6 +3,7 @@ const validator = require("email-validator");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const AppError = require("../utils/AppError");
+const emailHelper = require("../config/emailHelper")
 
 const SALT_ROUNDS = 12;
 
@@ -134,7 +135,7 @@ const forgetPassword = async (data) => {
 
     // Generate OTP
     const otp = otpGenerator();
-
+    
     // Check if this OTP is present in the OTPTable
     // Maybe use a while loop while here
 
@@ -192,6 +193,7 @@ const resetPassword = async (data) => {
     await user.save();
 
     return {
+        success: true,
         message: "Password reset successfully"
     };
 };
