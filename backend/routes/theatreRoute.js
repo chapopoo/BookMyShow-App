@@ -1,5 +1,4 @@
 const express = require('express');
-const Theatre = require('../model/theatreModel');
 const theatreRouter = express.Router();
 const {addTheatre, updateTheatre, deleteTheatre, getAllTheatres, getTheatresByOwner} = require("../controllers/theatreController");
 

@@ -1,0 +1,190 @@
+/* ─────────────────────────────────────────
+   HOME PAGE
+   Works inside ProtectedRoute's
+   padded white content div (padding: 24)
+   ───────────────────────────────────────── */
+
+/* ── Outer wrapper ── */
+.home-wrap {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* ── Top row: title + search side by side ── */
+.home-top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 4px;
+}
+
+.home-section-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin: 0 0 2px;
+}
+
+.home-section-sub {
+  font-size: 0.82rem;
+  color: #999;
+  margin: 0;
+}
+
+/* ── Search ── */
+.home-search.ant-input-affix-wrapper {
+  width: 260px;
+  height: 38px;
+  border-radius: 8px;
+  border-color: #d9d9d9;
+  font-size: 0.88rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.home-search.ant-input-affix-wrapper:hover {
+  border-color: #1f5c71;
+}
+
+.home-search.ant-input-affix-wrapper-focused {
+  border-color: #1f5c71;
+  box-shadow: 0 0 0 2px rgba(31, 92, 113, 0.12);
+}
+
+/* ── Divider ── */
+.home-divider {
+  height: 1px;
+  background: #ebebeb;
+  margin: 16px 0 24px;
+}
+
+/* ── Movie card ── */
+.movie-card {
+  background: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid #efefef;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.movie-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+/* ── Poster ── */
+.movie-poster-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  overflow: hidden;
+  background: #e8e8e8;
+}
+
+.movie-poster {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+.movie-card:hover .movie-poster {
+  transform: scale(1.05);
+}
+
+/* Hover overlay */
+.movie-poster-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(10, 10, 30, 0.52);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 14px;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.movie-card:hover .movie-poster-overlay {
+  opacity: 1;
+}
+
+/* Book chip — plain styled span, no ANTD Button needed */
+.book-chip {
+  background: #1f5c71;
+  color: #fff;
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 5px 14px;
+  border-radius: 20px;
+  letter-spacing: 0.3px;
+}
+
+/* ── Info section ── */
+.movie-info {
+  padding: 10px 12px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  flex: 1;
+}
+
+.movie-card-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin: 0;
+  line-height: 1.3;
+  /* Clamp to 2 lines — long titles won't break grid */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.movie-tag {
+  font-size: 0.7rem;
+  border-radius: 4px;
+  width: fit-content;
+  margin: 0;
+}
+
+/* ── Meta: duration + year ── */
+.movie-meta {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  font-size: 0.75rem;
+  color: #aaa;
+  margin-top: auto;
+  padding-top: 4px;
+}
+
+.movie-meta span {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+/* ── Responsive ── */
+@media (max-width: 576px) {
+  .home-top-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .home-search.ant-input-affix-wrapper {
+    width: 100%;
+  }
+
+  .home-section-title {
+    font-size: 1.2rem;
+  }
+}

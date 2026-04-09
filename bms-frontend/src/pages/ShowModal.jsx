@@ -54,7 +54,7 @@ const ShowModal = ({ isShowModalOpen, setIsShowModalOpen, selectedTheatre }) => 
                 response = await addShow({ ...values, theatre: selectedTheatre._id })
             }
             else {
-                response = await updateShow({ ...values, theatre: selectedTheatre._id, showId: selectedShow._id })
+                response = await updateShow({ ...values, theatre: selectedTheatre._id, showID: selectedShow._id })
             }
 
             if (response.success) {
@@ -80,7 +80,7 @@ const ShowModal = ({ isShowModalOpen, setIsShowModalOpen, selectedTheatre }) => 
     const handleDelete = async (showId) => {
         try {
             dispatch(showLoading());
-            const response = await deleteShow({ showId: showId });
+            const response = await deleteShow({ showID: showId });
             if (response.success) {
                 message.success(response.message);
                 getData();

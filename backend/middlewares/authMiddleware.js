@@ -15,6 +15,7 @@ module.exports = function(req, res, next) {
         if (e.name === "TokenExpiredError") {
             message = "Token expired. Please login again";
         }
+        
         res.status(401).send({
             success: false,
             message: "Invalid Token! please try logging in again"

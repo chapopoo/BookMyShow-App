@@ -1,11 +1,11 @@
-import React from 'react'
-import { useEffect, useState } from 'react'
-import { hideLoading, showLoading } from '../redux/loaderSlice'
+import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
+import { hideLoading, showLoading } from '../redux/loaderSlice'
 import { getAllMovies } from '../api/movies'
-import { message, Row, Col, Input } from 'antd'
+import { message, Row, Col, Input, Tag, Empty } from 'antd'
 import { useNavigate } from 'react-router-dom'
-import { SearchOutlined } from '@ant-design/icons'
+import { SearchOutlined, ClockCircleOutlined, CalendarOutlined } from '@ant-design/icons'
+import '../home.css'
 
 const Home = () => {
   const [movies, setMovies] = useState(null)
@@ -19,102 +19,103 @@ const Home = () => {
       const response = await getAllMovies()
       if (response.success) {
         setMovies(response.movies)
-      }
-      else {
+      } else {
         message.error(response.message)
       }
       dispatch(hideLoading())
+    } catch (err) {
+      message.error(err.message)
+      dispatch(hideLoading())
     }
-    catch (err) {
-      message.error(err.message);
-      dispatch(hideLoading());
-    }
-  };
-
-  const handleSearch = (e) => {
-    setSearchText(e.target.value);
-    // implement backend search functionality here, e.g., filter movies based on searchText
-    console.log(searchText);
   }
 
   useEffect(() => {
-    getData();
-  }, []);
+    getData()
+  }, [])
+
+  const todayDate = new Date().toISOString().split('T')[0]
+
+  const filteredMovies = movies
+    ? movies.filter((movie) =>
+      movie.movieName?.toLowerCase().includes(searchText.toLowerCase())
+    )
+    : []
 
   return (
-    <>
-      <Row className="justify-content-center w-100">
-        <Col xs={{ span: 24 }} lg={{ span: 12 }}>
-          <Input
-            placeholder="Type here to search for movies"
-            onChange={handleSearch}
-            prefix={<SearchOutlined />}
-          />
-          <br />
-          <br />
-          <br />
-        </Col>
-      </Row>
-      <Row
-        className="justify-content-center"
-        gutter={{
-          xs: 8,
-          sm: 16,
-          md: 24,
-          lg: 32,
-        }}
-      >
-          {movies &&
-            movies
-              .filter((movie) =>
-                movie.movieName?.toLowerCase().includes(searchText.toLowerCase())
-              )
-              .map((movie) => (
-                <Col
-                  className="gutter-row mb-5"
-                  key={movie._id}
-                  xs={24}
-                  sm={12}
-                  md={8}
-                  lg={6}
-                >
-                  <div className="movie-card" style={{ boxShadow: '0 2px 8px #ddd', borderRadius: '12px', padding: '16px', background: '#fff', textAlign: 'center', height: '100%' }}>
-                    <img
-                      onClick={() => {
-                        navigate(
-                          `/movie/${movie._id}?date=${(new Date()).toISOString().split('T')[0]}`
-                        );
-                      }}
-                      className="cursor-pointer single-movie-img"
-                      src={movie.poster}
-                      alt="Movie Poster"
-                      width={180}
-                      height={260}
-                      style={{ borderRadius: "8px", objectFit: 'cover', boxShadow: '0 1px 6px #ccc' }}
-                    />
-                    <h3
-                      onClick={() => {
-                        navigate(
-                          `/movie/${movie._id}?date=${(new Date()).toISOString().split('T')[0]}`
-                        );
-                      }}
-                      className="cursor-pointer movie-title-details"
-                      style={{ fontWeight: 600, fontSize: '1.2rem', color: '#212121' }}
-                    >
-                      {movie.movieName}
-                    </h3>
-                    {/* <div className="movie-data">
-                      <span>Genre:</span> {movie.genre} <br />
-                      <span>Language:</span> {movie.language} <br />
-                      <span>Duration:</span> {movie.duration} min <br />
-                      <span>Release:</span> {new Date(movie.releaseDate).toLocaleDateString()}
-                    </div>
-                    <div style={{ color: '#555', fontSize: '14px', marginTop: '8px', minHeight: '40px' }}>{movie.description}</div> */}
+    <div className="home-wrap">
+
+      {/* ── Section heading + search in one row ── */}
+      <div className="home-top-row">
+        <div>
+          <h2 className="home-section-title">Now Showing</h2>
+          <p className="home-section-sub">
+            {movies ? `${filteredMovies.length} movies available` : 'Loading...'}
+          </p>
+        </div>
+        <Input
+          placeholder="Search movies..."
+          onChange={(e) => setSearchText(e.target.value)}
+          prefix={<SearchOutlined style={{ color: '#1f5c71' }} />}
+          className="home-search"
+          allowClear
+        />
+      </div>
+
+      {/* ── Divider ── */}
+      <div className="home-divider" />
+
+      {/* ── Movie grid ── */}
+      {movies && filteredMovies.length === 0 ? (
+        <Empty description="No movies found" style={{ marginTop: 60 }} />
+      ) : (
+        <Row gutter={[20, 24]}>
+          {filteredMovies.map((movie) => (
+            <Col key={movie._id} xs={12} sm={8} md={8} lg={6} xl={6}>
+              <div
+                className="movie-card"
+                onClick={() => navigate(`/movie/${movie._id}?date=${todayDate}`)}
+              >
+                {/* Poster */}
+                <div className="movie-poster-wrap">
+                  <img
+                    src={movie.poster}
+                    alt={movie.movieName}
+                    className="movie-poster"
+                  />
+                  <div className="movie-poster-overlay">
+                    <span className="book-chip">Book Tickets</span>
                   </div>
-                </Col>
-              ))}
-      </Row>
-    </>
+                </div>
+
+                {/* Info */}
+                <div className="movie-info">
+                  <p className="movie-card-title" title={movie.movieName}>
+                    {movie.movieName}
+                  </p>
+
+                  {movie.genre && (
+                    <Tag color="cyan" className="movie-tag">{movie.genre}</Tag>
+                  )}
+
+                  <div className="movie-meta">
+                    {movie.duration && (
+                      <span><ClockCircleOutlined /> {movie.duration} min</span>
+                    )}
+                    {movie.releaseDate && (
+                      <span>
+                        <CalendarOutlined />{' '}
+                        {new Date(movie.releaseDate).getFullYear()}
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+              </div>
+            </Col>
+          ))}
+        </Row>
+      )}
+    </div>
   )
 }
 
