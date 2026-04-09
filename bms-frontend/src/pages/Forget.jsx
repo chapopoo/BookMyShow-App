@@ -1,80 +1,86 @@
-import React,{useEffect} from "react";
-import {Button, Form, Input, message} from "antd";
-import {Link, useNavigate} from "react-router-dom";
-import {forgetPassword, loginUser} from "../api/users";
+import React from "react";
+import { Button, Form, Input, message } from "antd";
+import { Link, useNavigate } from "react-router-dom";
+import { forgetPassword } from "../api/users";
+import movieImg from "../assets/Img1.jpg";
+import "../auth.css";
 
-function Forget(){
+function Forget() {
+    const [messageApi, contextHolder] = message.useMessage();
+    const navigate = useNavigate();
+
     const onFinish = async (values) => {
-        try{
+        try {
             const response = await forgetPassword(values);
-            if(response.status === "success"){
-                message.success(response.message)
-                alert("OTP sent to your email")
-                // window.location.href = '/reset' // redirects to /reset url
-                navigate("/reset");
+            if (response.success) {
+                messageApi.success(response.message);
+                navigate("/reset", { state: { email: values.email } });
+            } else {
+                messageApi.error(response.message);
             }
-            else{
-                 message.error(response.message)
-            }
+        } catch (err) {
+            messageApi.error(err.response?.data?.message || "Something went wrong!");
         }
-        catch(err){
-            message.error(err.message)
-        }
-    }
-
-    const navigate = useNavigate()
-    // useEffect(() => {
-    //     if(localStorage.getItem('token')){
-    //         navigate("/");
-    //     }
-    // }, [])
+    };
 
     return (
         <>
-            <header className="App-header">
-                <main className="main-area mw-500 text-center px-3">
-                    <section className="left-section">
-                        <h1>Forget Password</h1>
-                    </section>
-                    <section className="right-section">
-                        <Form layout="vertical" onFinish={onFinish}>
+            {contextHolder}
+
+            <div className="register-page">
+
+                {/* LEFT PANEL */}
+                <div className="left-panel" style={{ backgroundImage: `url(${movieImg})` }}>
+                    <div className="overlay">
+                        <h1>🎬 BookMyShow</h1>
+                        <p>We'll send an OTP to your registered email</p>
+                    </div>
+                </div>
+
+                {/* RIGHT PANEL */}
+                <div className="right-panel">
+                    <div className="register-card">
+
+                        <h2>Forgot Password?</h2>
+                        <p className="card-sub">No worries — enter your email and we'll send you a reset OTP</p>
+
+                        <Form onFinish={onFinish} layout="vertical" size="large">
 
                             <Form.Item
                                 label="Email"
-                                htmlFor="email"
                                 name="email"
-                                className="d-block"
-                                rules={[{ required: true, message: "Email is required" }]}
+                                rules={[
+                                    { required: true, message: "Email is required" },
+                                    { type: "email", message: "Enter a valid email" },
+                                ]}
                             >
-                                <Input
-                                    id="email"
-                                    type="text"
-                                    placeholder="Enter your Email"
-                                ></Input>
+                                <Input placeholder="Enter your registered email" />
                             </Form.Item>
 
-
-                            <Form.Item className="d-block">
-                                <Button
-                                    type="primary"
-                                    block
-                                    htmlType="submit"
-                                    style={{ fontSize: "1rem", fontWeight: "600" }}
-                                >
-                                    SEND OTP
+                            <Form.Item style={{ marginBottom: 8 }}>
+                                <Button className="custom-btn" block htmlType="submit">
+                                    Send OTP
                                 </Button>
                             </Form.Item>
+
                         </Form>
-                        <div>
-                            <p>
-                                Existing User? <Link to="/login">Login Here</Link>
-                            </p>
-                        </div>
-                    </section>
-                </main>
-            </header>
+
+                        <p className="login-text">
+                            Remember your password? <Link to="/login">Back to Login</Link>
+                        </p>
+
+                        <div className="auth-divider">or</div>
+
+                        <p className="login-text">
+                            New user? <Link to="/register">Create an account</Link>
+                        </p>
+
+                    </div>
+                </div>
+
+            </div>
         </>
-    )
+    );
 }
 
 export default Forget;

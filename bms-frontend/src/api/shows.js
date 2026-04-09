@@ -22,7 +22,7 @@ const deleteShow = async (value) => {
 
 const updateShow = async (value) => {
     try{
-        const response = await axiosInstance.post('/api/shows/update-show', value)
+        const response = await axiosInstance.put('/api/shows/update-show', value)
         return response.data
     }
     catch (err) {
