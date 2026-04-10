@@ -1,7 +1,6 @@
 const showRouter = require('express').Router();
-const Show = require('../model/showModel');
 const authMiddleware = require('../middlewares/authMiddleware');
-const { addShow, deleteShow, updateShow, getAllShowsByTheatre, getAllTheatreByMovie, getShowById } = require('../controllers/showController');
+const { addShow, deleteShow, updateShow, getAllShowsByTheatre, getAllTheatresByMovie, getShowById } = require('../controllers/showController');
 
 showRouter.post('/add-show', authMiddleware, addShow);
 
@@ -11,7 +10,7 @@ showRouter.put('/update-show', authMiddleware, updateShow)
 
 showRouter.post('/get-all-shows-by-theatre', authMiddleware, getAllShowsByTheatre)
 
-showRouter.post('/get-all-theatre-by-movie', authMiddleware, getAllTheatreByMovie)
+showRouter.post('/get-all-theatre-by-movie', authMiddleware, getAllTheatresByMovie)
 
 showRouter.post('/get-show-by-id', authMiddleware, getShowById);
 

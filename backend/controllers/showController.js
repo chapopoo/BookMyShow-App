@@ -67,10 +67,10 @@ const getAllShowsByTheatre = async (req, res) => {
     }
 };
 
-const getAllTheatreByMovie = async (req, res) => {
+const getAllTheatresByMovie = async (req, res) => {
     try {
         const { movie, date } = req.body;
-        const theatres = await showService.getAllTheatreByMovie(movie, date);
+        const theatres = await showService.getAllTheatresByMovie({ movie, date });
         res.send({
             success: true,
             message: "Theatres fetched successfully",
@@ -106,6 +106,6 @@ module.exports = {
     deleteShow,
     updateShow,
     getAllShowsByTheatre,
-    getAllTheatreByMovie,
+    getAllTheatresByMovie,
     getShowById,
 }

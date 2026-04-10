@@ -46,8 +46,8 @@ const getAllShowsByTheatre = async (theatreID) => {
     return await Show.find({ theatre: theatreID }).populate("movie");
 }
 
-const getAllTheatreByMovie = async (data) => {
-    const { movie, date } = data;
+const getAllTheatresByMovie = async ({ movie, date }) => {
+    // const { movie, date } = data;
 
     const shows = await Show.find({ movie, date }).populate('theatre');
 
@@ -111,6 +111,6 @@ module.exports = {
     deleteShow,
     updateShow,
     getAllShowsByTheatre,
-    getAllTheatreByMovie,
+    getAllTheatresByMovie,
     getShowById,
 }
