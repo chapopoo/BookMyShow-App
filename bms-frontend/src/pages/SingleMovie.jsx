@@ -28,8 +28,9 @@ const SingleMovie = () => {
         try{
             dispatch(showLoading());
             const response = await getMovieById(params.id);
+            console.log(response)
             if(response.success){
-                setMovie(response.data)
+                setMovie(response.movie)
             }else{
                 message.error(response.message)
             }
@@ -53,7 +54,7 @@ const SingleMovie = () => {
             dispatch(hideLoading());
         }catch(err){
             dispatch(hideLoading());
-            message.err(err.message)
+            message.error(err.message)
         }
     }
 

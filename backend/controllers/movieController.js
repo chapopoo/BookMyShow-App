@@ -67,10 +67,28 @@ const getMovieById = async (req, res) => {
     }
 };
 
+const getMoviesBySearchText = async (req, res) => {
+    try{
+        const movies = await movieService.getMoviesBySearchText(req.params.text);
+        res.send({
+            success: true,
+            message: "Movies fetched successfully", 
+            movies
+        })
+    }
+    catch (err) {
+        res.status(err.statusCode || 500).send({
+            success: false,
+            message: err.message || "Internal Server Error"
+        })
+    }
+};
+
 
 module.exports = {
     addMovie,
     getAllMovies,
     updateMovie,
     getMovieById,
+    getMoviesBySearchText,
 }

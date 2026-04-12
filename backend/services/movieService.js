@@ -33,9 +33,19 @@ const getMovieById = async (id) => {
     return movie;
 };
 
+const getMoviesBySearchText = async (text) => {
+    if (!text || text === "undefined") {
+        throw new AppError("Search text is required", 400);
+    }
+    return await Movie.find({
+        "movieName": { $regex: text, $options: "i" } // Case-insensitive search for movie name 
+    });
+}
+
 module.exports = {
     addMovie,
     getAllMovies,
     updateMovie,
     getMovieById,
+    getMoviesBySearchText,
 }
