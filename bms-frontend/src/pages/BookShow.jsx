@@ -72,11 +72,13 @@ const BookShow = () => {
         console.log({ token })
         try {
             dispatch(showLoading());
+            console.log(selectedSeats.length * show.ticketPrice * 100);
             const response = await makePayment(
                 token,
                 selectedSeats.length * show.ticketPrice * 100
             );
 
+            console.log(response);
             if (response.success) {
                 message.success(response.message);
                 book(response.data);

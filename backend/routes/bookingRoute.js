@@ -6,82 +6,14 @@ const Booking = require('../model/bookingModel');
 const Show = require('../model/showModel');
 const UserModel = require('../model/userModel');
 const emailHelper = require("../config/emailHelper")
+const {makePayment, bookShow} = require("../controllers/bookingController")
 
-console.log('Stripe Key:', process.env.STRIPE_KEY); // Debug log for Stripe key
+//console.log('Stripe Key:', process.env.STRIPE_KEY); 
 
-bookingRouter.post('/make-payment', authMiddleware, async (req, res) => {
-    try {
-        const { token, amount } = req.body;
-        // const customer = await stripe.customers.create({
-        //     email: token.email,
-        //     source: token.id
-        // });
-
-        // This is what confirms that stripe has charged the card
-        // which the user has provided from frontend
-        const paymentIntent = await stripe.paymentIntents.create({
-            amount: amount,
-            currency: 'usd',
-            // customer: customer.id,
-            payment_method_types: ['card'],
-            receipt_email: token.email,
-            description: "Token has been assigned to the movie!"
-        });
-
-        const transactionId = paymentIntent.id;
-
-        res.send({
-            success: true,
-            message: "Payment Successful! Ticket(s) booked!",
-            data: transactionId
-        });
-    } catch (err) {
-        res.send({
-            success: false,
-            message: err.message
-        })
-    }
-});
+bookingRouter.post('/make-payment', authMiddleware, makePayment);
 
 // Create a booking after the payment
-bookingRouter.post('/book-show', authMiddleware, async (req, res) => {
-    try {
-        const newBooking = new Booking(req.body);
-        await newBooking.save();
-
-        const show = await Show.findById(req.body.show).populate("movie").populate("theatre");
-        const updatedBookedSeats = [...show.bookedSeats, ...req.body.seats];
-        await Show.findByIdAndUpdate(req.body.show, { bookedSeats: updatedBookedSeats });
-        res.send({
-            success: true,
-            message: 'New Booking done!',
-            data: newBooking
-        });
-
-        const user = await UserModel.findById(newBooking.user)
-
-        console.log({ user })
-
-        await emailHelper("ticket.html", user.email, {
-            name: user.name,
-            movie: show.movie.movieName,
-            theatre: show.theatre.name,
-            date: show.date,
-            time: show.time,
-            seats: newBooking.seats,
-            amount: newBooking.seats.length * show.ticketPrice,
-            transactionId: newBooking.transactionId,
-        });
-
-        console.log("Email sent")
-
-    } catch (err) {
-        res.send({
-            success: false,
-            message: err.message
-        });
-    }
-});
+bookingRouter.post('/book-show', authMiddleware, bookShow);
 
 
 bookingRouter.get("/get-all-bookings", authMiddleware, async (req, res) => {

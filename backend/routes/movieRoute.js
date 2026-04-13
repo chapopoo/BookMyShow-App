@@ -1,6 +1,5 @@
 const express = require('express');
 const movieRouter = express.Router();
-const Movie = require("../model/movieModel");
 const authMiddleware = require("../middlewares/authMiddleware");
 const { addMovie, getAllMovies, updateMovie, getMovieById, getMoviesBySearchText } = require("../controllers/movieController");
 

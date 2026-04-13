@@ -92,12 +92,12 @@ const getAllTheatresByMovie = async ({ movie, date }) => {
 
 }
 
-const getShowById = async (data) => {
-    if (!data || !data.showID) {
+const getShowById = async (showID) => {
+    if (!showID) {
         throw new AppError("Show ID is required", 400);
     }
 
-    const show = await Show.findById(data.showID).populate('movie').populate('theatre');
+    const show = await Show.findById(showID).populate('movie').populate('theatre');
 
     if (!show) {
         throw new AppError("Show not found", 404);
