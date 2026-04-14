@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { getCurrentUser } from "../api/users";
 import { useNavigate } from "react-router-dom";
 import { message, Layout, Menu } from "antd";
@@ -14,12 +14,12 @@ import {
 import { Link } from "react-router-dom";
 import { setUser } from "../redux/userSlice";
 
-function ProtectedRoute({ children }) {
+function ProtectedRoute({ children, allowedRoles = [] }) {
   const user = useSelector((state) => state.users.user);
   // Track the current authentication token in state to detect when user logs in/out
   // This allows useEffect to re-run when token changes and fetch the correct user data
   const [token, setToken] = useState(localStorage.getItem("token"));
-                                               
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -29,6 +29,7 @@ function ProtectedRoute({ children }) {
       key: "home",
       label: "Home",
       icon: <HomeOutlined />,
+      onClick: () => navigate("/"),
     },
     {
       key: "user",
@@ -77,7 +78,6 @@ function ProtectedRoute({ children }) {
     },
   ];
 
-
   const getValidUser = async () => {
     try {
       //Before fetching, turn loading on 
@@ -95,20 +95,20 @@ function ProtectedRoute({ children }) {
     }
   };
 
-  // Listen for localStorage changes from other browser tabs/windows
-  // This handles scenarios where user logs in/out in another tab
-  useEffect(() => {
-    const handleStorageChange = () => {
-      // When storage changes in another tab (e.g., user logs in elsewhere),
-      // update the token state in this component to keep it in sync
-      const newToken = localStorage.getItem("token");
-      setToken(newToken);
-    };
-    
-    window.addEventListener('storage', handleStorageChange);
-    // Cleanup: remove listener when component unmounts to prevent memory leaks
-    return () => window.removeEventListener('storage', handleStorageChange);
-  }, []);
+  // // Listen for localStorage changes from other browser tabs/windows
+  // // This handles scenarios where user logs in/out in another tab
+  // useEffect(() => {
+  //   const handleStorageChange = () => {
+  //     // When storage changes in another tab (e.g., user logs in elsewhere),
+  //     // update the token state in this component to keep it in sync
+  //     const newToken = localStorage.getItem("token");
+  //     setToken(newToken);
+  //   };
+
+  //   window.addEventListener('storage', handleStorageChange);
+  //   // Cleanup: remove listener when component unmounts to prevent memory leaks
+  //   return () => window.removeEventListener('storage', handleStorageChange);
+  // }, []);
 
   // Re-fetch user data whenever token changes
   // This ensures the correct user is displayed when switching between accounts
@@ -121,6 +121,18 @@ function ProtectedRoute({ children }) {
       navigate("/login");
     }
   }, [token, navigate]);
+
+  //Role-based authorization
+  useEffect(() => {
+    if (user && allowedRoles.length > 0) {
+      if (!allowedRoles.includes(user.role)) {
+        message.error("You are not authorized to access this page");
+        navigate("/");
+      }
+    }
+  }, [user, allowedRoles]);
+
+  if (!user) return null;
 
   return (
     user && (

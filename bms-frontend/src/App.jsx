@@ -21,16 +21,69 @@ function App() {
       <Loader />
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<ProtectedRoute><Home/></ProtectedRoute>} />
-          <Route path="/partner" element={<ProtectedRoute><Partner/></ProtectedRoute>} />
-          <Route path="/home" element={<ProtectedRoute><Admin/></ProtectedRoute>} />
-          <Route path="/profile" element={<ProtectedRoute><Profile/></ProtectedRoute>} />
+          {/* Common protected */}
+          <Route
+            path="/"
+            element={
+              <ProtectedRoute>
+                <Home />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Admin only */}
+          <Route
+            path="/home"
+            element={
+              <ProtectedRoute allowedRoles={["Admin"]}>
+                <Admin />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Partner only */}
+          <Route
+            path="/partner"
+            element={
+              <ProtectedRoute allowedRoles={["Partner"]}>
+                <Partner />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* All logged-in users */}
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute allowedRoles={["User", "Admin", "Partner"]}>
+                <Profile />
+              </ProtectedRoute>
+            }
+          />
+
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/movie/:id" element={<ProtectedRoute><SingleMovie/></ProtectedRoute>} />
-          <Route path="/book-show/:id" element={<ProtectedRoute><BookShow/></ProtectedRoute>} />
-          <Route path='/forget' element={<Forget />} />
-          <Route path='/reset' element={<Reset />} />
+
+          <Route
+            path="/movie/:id"
+            element={
+              <ProtectedRoute>
+                <SingleMovie />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/book-show/:id"
+            element={
+              <ProtectedRoute>
+                <BookShow />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route path="/forget" element={<Forget />} />
+          <Route path="/reset" element={<Reset />} />
         </Routes>
       </BrowserRouter>
     </Provider>
