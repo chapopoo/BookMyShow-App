@@ -86,21 +86,22 @@ const bookShow = async (bookingData) => {
     return newBooking;
 };
 
-// getAllBookings = async (userId) => {
-//     const bookings = await Booking.find({ user: userId })
-//         .populate("user")
-//         .populate({
-//             path: "show",
-//             populate: [
-//                 { path: "movie" },
-//                 { path: "theatre" }
-//             ]
-//         });
+const getAllBookings = async (userId) => {
+    const bookings = await Booking.find({ user: userId })
+        .populate("user")
+        .populate({
+            path: "show",
+            populate: [
+                { path: "movie" },
+                { path: "theatre" }
+            ]
+        });
 
-//     return bookings;
-// };
+    return bookings;
+};
 
 module.exports = {
     makePayment,
     bookShow,
+    getAllBookings,
 }
