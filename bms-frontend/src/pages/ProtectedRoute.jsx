@@ -84,11 +84,10 @@ function ProtectedRoute({ children, allowedRoles = [] }) {
       dispatch(showLoading());
 
       const response = await getCurrentUser();
-      console.log(response)
 
       dispatch(setUser(response.user)); // Store the user in the Redux store
-      dispatch(hideLoading());
-      // Hide Loader
+      dispatch(hideLoading());// Hide Loader
+
     } catch (error) {
       dispatch(setUser(null));
       message.error(error.message);

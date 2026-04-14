@@ -21,7 +21,7 @@ function App() {
       <Loader />
       <BrowserRouter>
         <Routes>
-          {/* Common protected */}
+          //Common protected
           <Route
             path="/"
             element={
@@ -31,7 +31,7 @@ function App() {
             }
           />
 
-          {/* Admin only */}
+          //Admin only
           <Route
             path="/home"
             element={
@@ -41,7 +41,7 @@ function App() {
             }
           />
 
-          {/* Partner only */}
+          //Partner only
           <Route
             path="/partner"
             element={
