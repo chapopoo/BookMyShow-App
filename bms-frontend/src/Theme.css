@@ -1,0 +1,67 @@
+
+/* Light theme (default) */
+:root,
+[data-theme="light"] {
+  --bg-page:          #f5f7fa;
+  --bg-surface:       #ffffff;
+  --bg-navbar:        #001529;       /* ANTD dark navbar — stays dark in both themes */
+  --bg-input:         #ffffff;
+  --bg-card:          #ffffff;
+  --bg-overlay:       rgba(10, 10, 30, 0.82);
+
+  --text-primary:     #1a1a2e;
+  --text-secondary:   #555555;
+  --text-muted:       #999999;
+  --text-on-dark:     #ffffff;
+
+  --border-color:     #ebebeb;
+  --border-input:     #d9d9d9;
+
+  --brand:            #1f5c71;
+  --brand-dark:       #17485a;
+  --brand-light:      #3ab0d0;
+
+  --card-shadow:      0 2px 8px rgba(0, 0, 0, 0.07);
+  --card-shadow-hover:0 8px 24px rgba(0, 0, 0, 0.13);
+
+  --auth-right-bg:    #f5f7fa;
+  --auth-card-bg:     #ffffff;
+  --auth-label:       #333333;
+  --auth-link:        #1f5c71;
+
+  --toggle-bg:        rgba(255, 255, 255, 0.1);
+  --toggle-color:     #fadb14;       /* sun = yellow */
+}
+
+/* ── Dark theme ── */
+[data-theme="dark"] {
+  --bg-page:          #0f0f17;
+  --bg-surface:       #1a1a2e;
+  --bg-navbar:        #0a0a14;
+  --bg-input:         #1e1e30;
+  --bg-card:          #1e1e30;
+  --bg-overlay:       rgba(10, 10, 30, 0.75);
+
+  --text-primary:     #f0f0f0;
+  --text-secondary:   #b0b0c0;
+  --text-muted:       #666688;
+  --text-on-dark:     #ffffff;
+
+  --border-color:     #2a2a3e;
+  --border-input:     #3a3a50;
+
+  --brand:            #3ab0d0;       /* lighter teal — readable on dark */
+  --brand-dark:       #2a90b0;
+  --brand-light:      #5ecde8;
+
+  --card-shadow:      0 2px 12px rgba(0, 0, 0, 0.4);
+  --card-shadow-hover:0 8px 32px rgba(0, 0, 0, 0.6);
+
+  --auth-right-bg:    #13131f;
+  --auth-card-bg:     #1a1a2e;
+  --auth-label:       #c0c0d8;
+  --auth-link:        #3ab0d0;
+
+  --toggle-bg:        rgba(255, 255, 255, 0.08);
+  --toggle-color:     #a0c4ff;       /* moon = cool blue */
+}

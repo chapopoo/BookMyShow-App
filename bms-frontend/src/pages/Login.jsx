@@ -1,9 +1,8 @@
-import React from "react";
 import { Button, Form, Input, message } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import { loginUser } from "../api/users";
 import movieImg from "../assets/Img1.jpg";
-import "../auth.css";
+import "../Auth.css";
 
 function Login() {
   const [messageApi, contextHolder] = message.useMessage();

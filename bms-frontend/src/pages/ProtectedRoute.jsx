@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { getCurrentUser } from "../api/users";
 import { useNavigate } from "react-router-dom";
-import { message, Layout, Menu } from "antd";
+import { message, Layout, Menu, Tooltip, ConfigProvider, theme as antdTheme } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { hideLoading, showLoading } from "../redux/loaderSlice";
 import { Header } from "antd/es/layout/layout";
@@ -10,20 +10,25 @@ import {
   LogoutOutlined,
   ProfileOutlined,
   UserOutlined,
+  SunOutlined,
+  MoonOutlined,
 } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import { setUser } from "../redux/userSlice";
+import { toggleTheme, initTheme } from "../redux/themeSlice";
 
 function ProtectedRoute({ children, allowedRoles = [] }) {
   const user = useSelector((state) => state.users.user);
-  // Track the current authentication token in state to detect when user logs in/out
-  // This allows useEffect to re-run when token changes and fetch the correct user data
+  const themeMode = useSelector((state) => state.theme.mode);
   const [token, setToken] = useState(localStorage.getItem("token"));
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  console.log({ user })
+  // Apply saved theme on first load
+  useEffect(() => {
+    dispatch(initTheme());
+  }, []);
+
   const navItems = [
     {
       key: "home",
@@ -87,7 +92,6 @@ function ProtectedRoute({ children, allowedRoles = [] }) {
 
       dispatch(setUser(response.user)); // Store the user in the Redux store
       dispatch(hideLoading());// Hide Loader
-
     } catch (error) {
       dispatch(setUser(null));
       message.error(error.message);
@@ -129,34 +133,85 @@ function ProtectedRoute({ children, allowedRoles = [] }) {
         navigate("/");
       }
     }
-  }, [user, allowedRoles]);
+  }, [user, allowedRoles, navigate]);
 
-  if (!user) return null;
+  if (!user) return null; // or a loading spinner, since we're fetching user data on mount
 
   return (
     user && (
       <>
-        <Layout>
-          <Header
-            className="d-flex justify-content-between"
+        <ConfigProvider
+          theme={{
+            algorithm:
+              themeMode === "dark"
+                ? antdTheme.darkAlgorithm
+                : antdTheme.defaultAlgorithm,
+          }}
+        >
+          <Layout>
+            <Header
+              style={{
+                position: "sticky",
+                top: 0,
+                zIndex: 100,
+                width: "100%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                background: "var(--bg-navbar)",
+                paddingInline: 24,
+              }}
+            >
+              {/* Brand */}
+              <h3 style={{ color: "#ffffff", margin: 0, fontWeight: 700, whiteSpace: "nowrap" }}>
+                🎬 Book My Show
+              </h3>
+
+              {/* Nav + Toggle */}
+              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                <Menu
+                  theme="dark"
+                  mode="horizontal"
+                  items={navItems}
+                  style={{ background: "transparent", borderBottom: "none", minWidth: 200 }}
+                />
+
+                {/* Sun / Moon toggle */}
+                <Tooltip title={themeMode === "light" ? "Switch to dark mode" : "Switch to light mode"}>
+                  <button
+                    onClick={() => dispatch(toggleTheme())}
+                    style={{
+                      background: "var(--toggle-bg)",
+                      border: "1px solid rgba(255,255,255,0.15)",
+                      borderRadius: "50%",
+                      width: 36,
+                      height: 36,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      cursor: "pointer",
+                      color: "var(--toggle-color)",
+                    }}
+                  >
+                  {themeMode === "light" ? <MoonOutlined /> : <SunOutlined />}
+                </button>
+              </Tooltip>
+            </div>
+          </Header>
+
+          {/* Content */}
+          <div
             style={{
-              position: "sticky",
-              top: 0,
-              zIndex: 1,
-              width: "100%",
-              display: "flex",
-              alignItems: "center",
+              padding: 24,
+              minHeight: "calc(100vh - 64px)",
+              background: "var(--bg-page)",
+              transition: "background 0.3s ease",
             }}
           >
-            <h3 className="demo-logo text-white m-0" style={{ color: "white" }}>
-              Book My Show
-            </h3>
-            <Menu theme="dark" mode="horizontal" items={navItems} />
-          </Header>
-          <div style={{ padding: 24, minHeight: 380, height: "90vh", background: "#fff" }}>
             {children}
           </div>
         </Layout>
+      </ConfigProvider >
       </>
     )
   );
