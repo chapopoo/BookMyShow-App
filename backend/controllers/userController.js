@@ -33,7 +33,7 @@ const loginUser = async (req, res) => {
     } catch (err) {
         res.status(err.statusCode || 500).send({
             success: false,
-            message: err.message
+            message: err.message || "Internal Server Error"
         });
     }
 };
@@ -50,7 +50,7 @@ const getCurrentUser = async (req, res) => {
     } catch (err) {
         res.status(err.statusCode || 500).send({
             success: false,
-            message: err.message
+            message: err.message || "Internal Server Error"
         });
     }
 }
@@ -66,7 +66,7 @@ const forgetPassword = async (req, res) => {
     } catch (err) {
         res.status(err.statusCode || 500).json({
             success: false,
-            message: err.message
+            message: err.message || "Internal Server Error"
         });
     }
 };
@@ -82,7 +82,7 @@ const resetPassword = async (req, res) => {
     } catch (err) {
         res.status(err.statusCode || 500).json({
             success: false,
-            message: err.message
+            message: err.message || "Internal Server Error"
         });
     }
 };

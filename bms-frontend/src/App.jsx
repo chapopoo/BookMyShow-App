@@ -51,7 +51,7 @@ function App() {
             }
           />
 
-          {/* All logged-in users */}
+          // All logged-in users 
           <Route
             path="/profile"
             element={

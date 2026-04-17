@@ -12,13 +12,14 @@ module.exports = function(req, res, next) {
     catch(e){
         let message = "Invalid token";
 
+        // If the error is due to token expiration, provide a more specific message
         if (e.name === "TokenExpiredError") {
             message = "Token expired. Please login again";
         }
         
         res.status(401).send({
             success: false,
-            message: "Invalid Token! please try logging in again"
+            message: e.message || "Invalid Token! please try logging in again"
         })
     }
 }
