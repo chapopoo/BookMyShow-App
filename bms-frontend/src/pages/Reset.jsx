@@ -55,7 +55,6 @@ function Reset() {
                                 name="otp"
                                 rules={[
                                     { required: true, message: "OTP is required" },
-                                    { len: 6, message: "OTP must be 6 digits" },
                                     { pattern: /^\d+$/, message: "OTP must be numeric" },
                                 ]}
                             >
